@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Popular Movies</string>
+
+    <!-- Navigation Drawer - Navigation Header -->
+    <string name="my_app_title">Popular Movies App</string>
+
+    <!-- Navigation Drawer - Menu-->
+    <string name="popular_movies">Popular movies</string>
+    <string name="top_rated_movies">Top-rated movies</string>
+    <string name="favourite_movies">My favourite movies</string>
+
+    <!-- Navigation Drawer - ActionBarDrawerToggle -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- OnNavigationItemSelected Menu toasts -->
+    <string name="toast_favourites">Coming soon. Will show your Favourite Movies</string>
+
+    <!-- Error messages -->
+    <string name="connection_error_message">Something went wrong. Please make sure you entered your API key and/or check your internet connection</string>
+
+    <!-- Content description -->
+    <string name="descrip_backdrop">The movie\'s backdrop image</string>
+    <string name="descrip_poster">The movie\'s poster</string>
+
+    <!-- Details Activity -->
+    <string name="coming_soon">(More features coming soon...)</string>
+
+</resources>
