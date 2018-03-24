@@ -1,11 +1,14 @@
 package com.mwano.lauren.popular_movies;
 
+
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -29,17 +32,19 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler,
-        NavigationView.OnNavigationItemSelectedListener {
+        LoaderManager.LoaderCallbacks<ArrayList<Movie>>, NavigationView.OnNavigationItemSelectedListener {
+
+    private static final int MOVIE_QUERY_LOADER = 10;
+    private static final String SORT_QUERY = "sort query";
 
     private static final String POPULAR = "popular";
     private static final String TOP_RATED = "top_rated";
     private static final String TAG = MainActivity.class.getSimpleName();
-
+    ArrayList<Movie> movies;
     private RecyclerView mRecyclerView;
     private MovieAdapter mMovieAdapter;
     private TextView mConnectionErrorMessageDisplay;
     private int mColumnsNumber;
-    ArrayList<Movie> movies;
     private DrawerLayout mDrawer;
     private Toolbar mToolbar;
 
@@ -64,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mRecyclerView.setAdapter(mMovieAdapter);
 
         // Instantiate the navigation drawer
-        //(Code source, Google's Android Developer Fundamental Course:
+        //(Source code, java and xml, Google's Android Developer Fundamental Course:
         // https://google-developer-training.gitbooks.io
         // /android-developer-fundamentals-course-concepts/content/en/Unit%202/42_c_menus.html
         mDrawer = (DrawerLayout)
@@ -78,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                         R.string.navigation_drawer_open,
                         R.string.navigation_drawer_close);
         if (mDrawer != null) {
-           mDrawer.addDrawerListener(toggle);
+            mDrawer.addDrawerListener(toggle);
         }
         toggle.syncState();
 
@@ -87,70 +92,98 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         if (navigationView != null) {
             navigationView.setNavigationItemSelectedListener(this);
 
-        loadMovieData(POPULAR);
-        setTitle(R.string.my_app_title);
+            setTitle(R.string.my_app_title);
+        }
+
+        // Bundle
+        Bundle popularBundle = new Bundle();
+        popularBundle.putString(SORT_QUERY, POPULAR);
+
+        // TODO CHeck - Initialise the loader
+        LoaderManager loaderManager = getSupportLoaderManager();
+        Loader<ArrayList<Movie>> moviePosterLoader = loaderManager.getLoader(MOVIE_QUERY_LOADER);
+        if (moviePosterLoader == null) {
+            getSupportLoaderManager().initLoader(MOVIE_QUERY_LOADER, popularBundle, MainActivity.this);
+        } else {
+            getSupportLoaderManager().restartLoader(MOVIE_QUERY_LOADER, popularBundle, MainActivity.this);
         }
     }
+
 
     @Override
     public void onClick(Movie currentMovie) {
         Context context = this;
         Class destinationClass = DetailActivity.class;
-        Intent intentToStartDetailActivity = new Intent (context, destinationClass);
+        Intent intentToStartDetailActivity = new Intent(context, destinationClass);
         intentToStartDetailActivity.putExtra("movie", currentMovie);
         startActivity(intentToStartDetailActivity);
     }
 
-    /**
-     * Create an AsyncTask for the http connection and JSON parsing
-     */
-    public class FetchMoviesTask extends AsyncTask <String, Void, ArrayList<Movie>> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
 
-        @Override
-        protected ArrayList<Movie> doInBackground(String... params) {
+    @Override
+    public Loader<ArrayList<Movie>> onCreateLoader(int id, final Bundle args) {
+        return new AsyncTaskLoader<ArrayList<Movie>>(this) {
 
-            if (params.length == 0) {
-                return null;
+            ArrayList<Movie> mMovieData;
+
+            @Override
+            protected void onStartLoading() {
+                if (mMovieData != null) {
+                    // Use cached data
+                    deliverResult(mMovieData);
+                } else {
+                    //There is no data, let's load it
+                    forceLoad();
+                }
             }
-            String movieSort = params[0];
-            URL movieRequestUrl = MovieApi.buildUrl(movieSort);
 
-            try {
-               switch (movieSort) {
-                   case POPULAR:
-                       movieRequestUrl = MovieApi.buildUrl(POPULAR);
-                       break;
-                   case TOP_RATED:
-                       movieRequestUrl = MovieApi.buildUrl(TOP_RATED);
-                       break;
-                   // Default exception
-                   default:
-                       throw new UnsupportedOperationException("Unknown url: " + movieRequestUrl);
-               }
-                String jsonResponse = NetworkUtils.httpConnect(movieRequestUrl);
-                return JsonUtils.parseMovieJson(jsonResponse);
+            @Override
+            public ArrayList<Movie> loadInBackground() {
+                String movieSort = args.getString(SORT_QUERY);
 
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
+                if (movieSort != null && movieSort.equals("")) {
+                    return null;
+                }
+                URL movieRequestUrl = MovieApi.buildUrl(movieSort);
+
+                try {
+                    switch (movieSort) {
+                        case POPULAR:
+                            movieRequestUrl = MovieApi.buildUrl(POPULAR);
+                            break;
+                        case TOP_RATED:
+                            movieRequestUrl = MovieApi.buildUrl(TOP_RATED);
+                            break;
+                        // Default exception
+                        default:
+                            throw new UnsupportedOperationException("Unknown url: " + movieRequestUrl);
+                    }
+                    String jsonResponse = NetworkUtils.httpConnect(movieRequestUrl);
+                    return JsonUtils.parseMovieJson(jsonResponse);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
+                }
             }
-        }
+        };
+    }
 
-        @Override
-        protected void onPostExecute(ArrayList<Movie> movies) {
-            super.onPostExecute(movies);
-            if (movies != null) {
-                mMovieAdapter.setMovieData(movies);
-            } else {
-                showConnectionErrorMessage();
-                Log.i(TAG, "Error displaying movies");
-            }
+
+    @Override
+    public void onLoadFinished(Loader<ArrayList<Movie>> loader, ArrayList<Movie> movies) {
+        if (movies != null) {
+            mMovieAdapter.setMovieData(movies);
+        } else {
+            showConnectionErrorMessage();
+            Log.i(TAG, "Error displaying movies");
         }
     }
+
+    @Override
+    public void onLoaderReset(Loader<ArrayList<Movie>> loader) {
+    }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -182,7 +215,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private void loadMovieData(String sortMode) {
         showMovieDataView();
-        new FetchMoviesTask().execute(sortMode);
+        Bundle sortModeBundle = new Bundle();
+        sortModeBundle.putString(SORT_QUERY, sortMode);
+        getSupportLoaderManager().restartLoader(MOVIE_QUERY_LOADER, sortModeBundle, MainActivity.this);
     }
 
     private void showMovieDataView() {
@@ -195,3 +230,4 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mConnectionErrorMessageDisplay.setVisibility(View.VISIBLE);
     }
 }
+
