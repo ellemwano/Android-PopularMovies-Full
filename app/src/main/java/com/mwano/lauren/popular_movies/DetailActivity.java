@@ -6,13 +6,18 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mwano.lauren.popular_movies.model.Movie;
+import com.mwano.lauren.popular_movies.model.Video;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 /**
  * Created by ElleMwa on 25/02/2018.
@@ -27,6 +32,9 @@ public class DetailActivity extends AppCompatActivity{
     private TextView mSynopsisView;
     private TextView mReleaseView;
     private TextView mRatingView;
+    ArrayList<Video> videos;
+    private RecyclerView mVideoRecyclerView;
+    private VideoAdapter mVideoAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,6 +72,18 @@ public class DetailActivity extends AppCompatActivity{
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        // Get reference to VideoRecyclerView
+        mVideoRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_videos);
+        // Get reference to error TextView
+        //mConnectionErrorMessageDisplay = (TextView) findViewById(R.id.connection_error_message_tv);
+        mVideoRecyclerView.setLayoutManager(new LinearLayoutManager
+                (this, LinearLayoutManager.HORIZONTAL, false));
+        mVideoRecyclerView.setHasFixedSize(true);
+        // Create new Adapter and set to RecyclerView in layout
+        //mVideoAdapter = new VideoAdapter(this, videos, this);
+        mVideoAdapter = new VideoAdapter(this, videos);
+        mVideoRecyclerView.setAdapter(mVideoAdapter);
     }
 
     @Override

@@ -62,8 +62,8 @@
             android:id="@+id/release_date_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
             android:textColor="@color/white"
             android:textSize="15sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/rating_tv"
@@ -93,9 +93,9 @@
             android:id="@+id/favourite"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:background="@drawable/ic_details_favourite_border"
             android:paddingLeft="8dp"
             android:paddingStart="8dp"
-            android:background="@drawable/ic_details_favourite_border"
             app:layout_constraintEnd_toStartOf="@id/guideline_vertical_end"
             app:layout_constraintTop_toBottomOf="@id/backdrop_iv" />
 
@@ -149,6 +149,14 @@
             app:layout_constraintEnd_toEndOf="@id/guideline_vertical_end"
             app:layout_constraintStart_toStartOf="@id/guideline_vertical_start"
             app:layout_constraintTop_toBottomOf="@+id/synopsis_tv" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview_videos"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                app:layout_constraintStart_toStartOf="@id/guideline_vertical_start"
+                app:layout_constraintEnd_toEndOf="@id/guideline_vertical_end"
+                app:layout_constraintTop_toBottomOf="@id/more_to_come"/>
 
     </android.support.constraint.ConstraintLayout>
 
