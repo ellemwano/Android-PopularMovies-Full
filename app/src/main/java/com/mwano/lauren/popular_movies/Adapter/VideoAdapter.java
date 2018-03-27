@@ -1,4 +1,4 @@
-package com.mwano.lauren.popular_movies;
+package com.mwano.lauren.popular_movies.Adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.mwano.lauren.popular_movies.R;
 import com.mwano.lauren.popular_movies.model.Video;
 import com.squareup.picasso.Picasso;
 

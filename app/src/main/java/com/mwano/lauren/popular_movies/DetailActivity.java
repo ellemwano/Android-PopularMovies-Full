@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mwano.lauren.popular_movies.Adapter.VideoAdapter;
 import com.mwano.lauren.popular_movies.model.Movie;
 import com.mwano.lauren.popular_movies.model.Video;
 import com.squareup.picasso.Picasso;
