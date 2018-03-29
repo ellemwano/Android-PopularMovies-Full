@@ -1,5 +1,7 @@
 package com.mwano.lauren.popular_movies.model;
 
+import android.net.Uri;
+
 public class Video {
 
 //    {
@@ -31,10 +33,14 @@ public class Video {
 // https://api.themoviedb.org/3/movie/(movieId)/videos?
 // api_key=(API_KEY)&language=en-US
 //
-// https://www.youtube.com/watch?v=(key)
+// https://www.youtube.com/watch?v=(key)      watch video
+//    https://i1.ytimg.com/vi/(key)/0.jpg    video thumbnail
 
     private String mVideoName;
     private String mVideoKey;
+
+    private static final String BASE_VIDEO_THUMBNAIL_PATH = "https://i1.ytimg.com/vi";
+    private static final String END_VIDEO_THUMBNAIL_PATH = "0.jpg";
 
 
     public Video (String videoName, String videoKey) {
@@ -54,8 +60,22 @@ public class Video {
         return mVideoKey;
     }
 
-    public void setmVideoKey(String videoKey) {
+    public void setVideoKey(String videoKey) {
         mVideoKey = videoKey;
+    }
+
+    public static Uri buildVideoThumbnailPath (Video video) {
+        Uri builtVideoThumbnailUri = null;
+        try {
+            builtVideoThumbnailUri = Uri.parse(BASE_VIDEO_THUMBNAIL_PATH)
+                    .buildUpon()
+                    .appendPath(video.getVideoKey())
+                    .appendPath(END_VIDEO_THUMBNAIL_PATH)
+                    .build();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return builtVideoThumbnailUri;
     }
 
 }

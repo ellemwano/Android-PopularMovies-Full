@@ -24,7 +24,7 @@ import java.util.ArrayList;
  * Created by ElleMwa on 25/02/2018.
  */
 
-public class DetailActivity extends AppCompatActivity{
+public class DetailActivity extends AppCompatActivity implements VideoAdapter.VideoAdapterOnClickHandler{
 
     private Toolbar mToolbar;
     private ImageView mBackdropView;
@@ -82,9 +82,13 @@ public class DetailActivity extends AppCompatActivity{
                 (this, LinearLayoutManager.HORIZONTAL, false));
         mVideoRecyclerView.setHasFixedSize(true);
         // Create new Adapter and set to RecyclerView in layout
-        //mVideoAdapter = new VideoAdapter(this, videos, this);
-        mVideoAdapter = new VideoAdapter(this, videos);
+        mVideoAdapter = new VideoAdapter(this, videos, this);
         mVideoRecyclerView.setAdapter(mVideoAdapter);
+    }
+
+    @Override
+    public void onClick(Video currentVideo) {
+
     }
 
     @Override

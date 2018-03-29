@@ -150,13 +150,23 @@
             app:layout_constraintStart_toStartOf="@id/guideline_vertical_start"
             app:layout_constraintTop_toBottomOf="@+id/synopsis_tv" />
 
+        <!--<FrameLayout-->
+            <!--android:id="@+id/frame_container"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0dp"-->
+            <!--app:layout_constraintStart_toStartOf="@id/guideline_vertical_start"-->
+            <!--app:layout_constraintEnd_toEndOf="@id/guideline_vertical_end"-->
+            <!--app:layout_constraintTop_toBottomOf="@id/more_to_come">-->
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerview_videos"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                app:layout_constraintStart_toStartOf="@id/guideline_vertical_start"
-                app:layout_constraintEnd_toEndOf="@id/guideline_vertical_end"
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                android:orientation="horizontal"
                 app:layout_constraintTop_toBottomOf="@id/more_to_come"/>
+
+
+        <!--</FrameLayout>-->
 
     </android.support.constraint.ConstraintLayout>
 

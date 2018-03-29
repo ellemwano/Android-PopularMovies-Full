@@ -25,7 +25,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     private Context mContext;
     private ArrayList<Movie> mMovies;
-    private final MovieAdapterOnClickHandler mClickHandler;
+    private final MovieAdapterOnClickHandler mMovieClickHandler;
 
     /**
      * Create an OnClickHandler interface
@@ -34,10 +34,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         void onClick(Movie currentMovie);
     }
 
-    public MovieAdapter (Context context, ArrayList<Movie> movies, MovieAdapterOnClickHandler clickHandler){
+    public MovieAdapter (Context context, ArrayList<Movie> movies, MovieAdapterOnClickHandler movieClickHandler){
         mContext = context;
         mMovies = movies;
-        mClickHandler = clickHandler;
+        mMovieClickHandler = movieClickHandler;
     }
 
     @Override
@@ -85,7 +85,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         public void onClick(View v) {
            int adapterPosition = getAdapterPosition();
            Movie currentMovie = mMovies.get(adapterPosition);
-           mClickHandler.onClick(currentMovie);
+           mMovieClickHandler.onClick(currentMovie);
         }
     }
 

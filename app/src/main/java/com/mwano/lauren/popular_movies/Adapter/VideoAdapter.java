@@ -18,7 +18,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
 
     private Context mContext;
     private ArrayList<Video> mVideos;
-    //private final VideoAdapter.VideoAdapterOnClickHandler mVideoClickHandler;
+    private final VideoAdapterOnClickHandler mVideoClickHandler;
 
     /**
      * Create an OnClickHandler interface
@@ -27,15 +27,10 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
         void onClick(Video currentVideo);
     }
 
-//    public VideoAdapter (Context context, ArrayList<Video> videos, VideoAdapter.VideoAdapterOnClickHandler videoClickHandler){
-//        mContext = context;
-//        mVideos = videos;
-//        mVideoClickHandler = videoClickHandler;
-//    }
-
-    public VideoAdapter (Context context, ArrayList<Video> videos){
+    public VideoAdapter (Context context, ArrayList<Video> videos, VideoAdapterOnClickHandler videoClickHandler){
         mContext = context;
         mVideos = videos;
+        mVideoClickHandler = videoClickHandler;
     }
 
     @Override
@@ -51,10 +46,10 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
     public void onBindViewHolder(VideoAdapter.VideoViewHolder videoViewHolder, int position) {
         mContext = videoViewHolder.mVideoImageView.getContext();
         Video mCurrentVideo = mVideos.get(position);
-        // TODO Modify
-//        Picasso.with(mContext).load(Video.buildFullPosterPath(mCurrentVideo))
+        //TODO modify
+//        Picasso.with(mContext).load(Video.buildVideoThumbnailPath(mCurrentVideo))
 //                .into(videoViewHolder.mVideoImageView);
-        Picasso.with(mContext).load(R.drawable.video)
+        Picasso.with(mContext).load("https://i1.ytimg.com/vi/zB4I68XVPzQ/0.jpg")
                 .into(videoViewHolder.mVideoImageView);
     }
 
@@ -72,7 +67,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
     /**
      * Create a ViewHolder with a click listener
      */
-    public class VideoViewHolder extends RecyclerView.ViewHolder //implements View.OnClickListener
+    public class VideoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
 
         public final ImageView mVideoImageView;
@@ -80,14 +75,14 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
         public VideoViewHolder(View view) {
             super(view);
             mVideoImageView = (ImageView)view.findViewById(R.id.video_image);
-            //view.setOnClickListener(this);
+            view.setOnClickListener(this);
         }
 
-//        @Override
-//        public void onClick(View v) {
-//            int adapterPosition = getAdapterPosition();
-//            Video currentVideo = mVideos.get(adapterPosition);
-//            mVideoClickHandler.onClick(currentVideo);
-//        }
+        @Override
+        public void onClick(View v) {
+            int adapterPosition = getAdapterPosition();
+            Video currentVideo = mVideos.get(adapterPosition);
+            mVideoClickHandler.onClick(currentVideo);
+        }
     }
 }
