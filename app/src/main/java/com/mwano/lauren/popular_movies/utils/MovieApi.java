@@ -17,7 +17,6 @@ public class MovieApi {
     private static final String BASE_URL = "http://api.themoviedb.org/3/movie";
     private static final String API_END = "api_key";
     private static final String API_KEY = BuildConfig.API_KEY;
-    private static final String MOVIE_ID = "movie_id";
     private static final String VIDEO_END = "videos";
     private static final String TAG = MovieApi.class.getSimpleName();
 
@@ -27,7 +26,7 @@ public class MovieApi {
      * @param sortType The popular or top_rated endpoints
      * @return Request URL to the MovieDB for popular or top_rated movies
      */
-    public static URL buildUrl(String sortType) {
+    public static URL buildMovieUrl(String sortType) {
 
         Uri builtMovieUri = Uri.parse(BASE_URL)
                 .buildUpon()
@@ -54,7 +53,7 @@ public class MovieApi {
 
         Uri builtVideoUri = Uri.parse(BASE_URL)
                 .buildUpon()
-                .appendPath(MOVIE_ID)
+                .appendPath(movieId)
                 .appendPath(VIDEO_END)
                 .appendQueryParameter(API_END, API_KEY)
                 .build();

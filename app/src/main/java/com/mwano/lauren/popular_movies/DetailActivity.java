@@ -76,8 +76,6 @@ public class DetailActivity extends AppCompatActivity implements VideoAdapter.Vi
 
         // Get reference to VideoRecyclerView
         mVideoRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_videos);
-        // Get reference to error TextView
-        //mConnectionErrorMessageDisplay = (TextView) findViewById(R.id.connection_error_message_tv);
         mVideoRecyclerView.setLayoutManager(new LinearLayoutManager
                 (this, LinearLayoutManager.HORIZONTAL, false));
         mVideoRecyclerView.setHasFixedSize(true);

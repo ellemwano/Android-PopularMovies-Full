@@ -52,15 +52,15 @@ public class MoviePosterLoader extends AsyncTaskLoader<ArrayList<Movie>> {
         if (movieSort != null && movieSort.equals("")) {
             return null;
         }
-        URL movieRequestUrl = MovieApi.buildUrl(movieSort);
+        URL movieRequestUrl = MovieApi.buildMovieUrl(movieSort);
 
         try {
             switch (movieSort) {
                 case POPULAR:
-                    movieRequestUrl = MovieApi.buildUrl(POPULAR);
+                    movieRequestUrl = MovieApi.buildMovieUrl(POPULAR);
                     break;
                 case TOP_RATED:
-                    movieRequestUrl = MovieApi.buildUrl(TOP_RATED);
+                    movieRequestUrl = MovieApi.buildMovieUrl(TOP_RATED);
                     break;
                 // Default exception
                 default:

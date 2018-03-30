@@ -25,5 +25,6 @@
 
     <!-- Details Activity -->
     <string name="coming_soon">(More features coming soon...)</string>
+    <string name="trailer_video">The movies\'s trailer</string>
 
 </resources>
