@@ -38,19 +38,19 @@ public class VideoLoader extends AsyncTaskLoader<ArrayList<Video>> {
         }
     }
 
+
+   // TODO rethink / modify
     @Override
     public ArrayList<Video> loadInBackground() {
         String movieId = mArgs.getString(MOVIE_ID);
-        String id = String. valueOf(getId());
 
         if (movieId != null && movieId.equals("")) {
-            return null;
+                return null;
         }
         URL videoRequestUrl = MovieApi.buildVideoUrl(movieId);
-
+        String currentId =
         try {
-            if (id.equals(MOVIE_ID)) {
-                videoRequestUrl = MovieApi.buildVideoUrl(MOVIE_ID);
+            videoRequestUrl = MovieApi.buildVideoUrl(MOVIE_ID);
 
             } else {
                 throw new UnsupportedOperationException("Unknown url: " + videoRequestUrl);
@@ -62,5 +62,6 @@ public class VideoLoader extends AsyncTaskLoader<ArrayList<Video>> {
             e.printStackTrace();
             return null;
         }
+
     }
 }
