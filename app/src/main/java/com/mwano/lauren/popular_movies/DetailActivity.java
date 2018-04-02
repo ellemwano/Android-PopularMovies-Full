@@ -24,6 +24,8 @@ import com.mwano.lauren.popular_movies.model.Movie;
 import com.mwano.lauren.popular_movies.model.Video;
 import com.squareup.picasso.Picasso;
 
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 
 import static com.mwano.lauren.popular_movies.Data.VideoLoader.MOVIE_ID;
@@ -47,6 +49,7 @@ public class DetailActivity extends AppCompatActivity
     private TextView mVideoTitle;
     private ImageView mVideoThumbnail;
     ArrayList<Video> videos;
+    public Movie currentMovie;
     private RecyclerView mVideoRecyclerView;
     private VideoAdapter mVideoAdapter;
     private TextView mDownloadErrorMessageDisplay;
@@ -73,7 +76,7 @@ public class DetailActivity extends AppCompatActivity
         Intent intentThatStartedThisActivity = getIntent();
         if (intentThatStartedThisActivity != null) {
             if (intentThatStartedThisActivity.hasExtra("movie")) {
-                Movie currentMovie = intentThatStartedThisActivity.getParcelableExtra("movie");
+                currentMovie = intentThatStartedThisActivity.getParcelableExtra("movie");
                 Picasso.with(this).load(Movie.buildFullPosterPath(currentMovie))
                         .into(mPosterView);
                 Picasso.with(this).load(Movie.buildFullBackdropPath(currentMovie))
@@ -108,17 +111,15 @@ public class DetailActivity extends AppCompatActivity
         // TODO check
         // Video loader bundle
         Bundle videoBundle = new Bundle();
-        String movieId = String.valueOf(id);
+        // static getId()
+        String movieId = String.valueOf(currentMovie.getId());
+        Log.i(TAG, "CurrentMovie ID is: " + movieId);
         videoBundle.putString(MOVIE_ID, movieId);
 
-        // Initialise Movie loader
-        LoaderManager loaderManager = getSupportLoaderManager();
-        Loader<ArrayList<Video>> videoLoader = loaderManager.getLoader(VIDEO_QUERY_LOADER);
-        if (videoLoader == null) {
-            getSupportLoaderManager().initLoader(VIDEO_QUERY_LOADER, videoBundle, DetailActivity.this);
-        } else {
-            getSupportLoaderManager().restartLoader(VIDEO_QUERY_LOADER, videoBundle, DetailActivity.this);
-        }
+        // Initialise Video loader
+//        LoaderManager loaderManager = getSupportLoaderManager();
+//        Loader<ArrayList<Video>> videoLoader = loaderManager.getLoader(VIDEO_QUERY_LOADER);
+        getSupportLoaderManager().initLoader(VIDEO_QUERY_LOADER, videoBundle, DetailActivity.this);
     }
 
     // Create new VideoLoader
@@ -131,7 +132,15 @@ public class DetailActivity extends AppCompatActivity
     @Override
     public void onLoadFinished(Loader<ArrayList<Video>> loader, ArrayList<Video> videos) {
         if (videos != null) {
-            mVideoAdapter.setVideoData(videos);
+            // mVideoAdapter.setVideoData(videos);
+            Video currentVideo = videos.get(0);
+            Picasso.with(this).load(Video.buildVideoThumbnailPath(currentVideo))
+                    .into(mVideoThumbnail);
+//            Picasso.with(this).load("https://i1.ytimg.com/vi/mPcbm-5MAPA/0.jpg")
+//                    .into(mVideoThumbnail);
+            // Image displays fine with fixed path
+            Log.i(TAG, "This is the path: "+ Video.buildVideoThumbnailPath(currentVideo));
+            // video key part is missing from the path, because URL in VideoLoader is wrong
         } else {
             //showConnectionErrorMessage();
             Log.i(TAG, "Error displaying videos");
@@ -158,6 +167,13 @@ public class DetailActivity extends AppCompatActivity
         }
         return super.onOptionsItemSelected(item);
     }
+
+//    private void loadVideoData(String movieId) {
+//        Picasso.with(this).load(Video.buildVideoThumbnailPath(curre))
+//                .into(mVideoThumbnail);
+//        Picasso.with(this).load("https://i1.ytimg.com/vi/zB4I68XVPzQ/0.jpg")
+//                .into(mVideoThumbnail);
+//    }
 
     // TODO set these 2
 //    private void showMovieDataView() {

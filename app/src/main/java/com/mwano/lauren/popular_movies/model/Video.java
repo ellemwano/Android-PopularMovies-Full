@@ -66,10 +66,11 @@ public class Video {
 
     public static Uri buildVideoThumbnailPath (Video video) {
         Uri builtVideoThumbnailUri = null;
+        String keySort = video.getVideoKey();
         try {
             builtVideoThumbnailUri = Uri.parse(BASE_VIDEO_THUMBNAIL_PATH)
                     .buildUpon()
-                    .appendPath(video.getVideoKey())
+                    .appendPath(keySort)
                     .appendPath(END_VIDEO_THUMBNAIL_PATH)
                     .build();
         } catch (Exception e) {

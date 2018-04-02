@@ -41,6 +41,7 @@ public class MovieApi {
             e.printStackTrace();
         }
         Log.i(TAG, "Built movieURI " + url);
+        //URL is wrong
         return url;
     }
 

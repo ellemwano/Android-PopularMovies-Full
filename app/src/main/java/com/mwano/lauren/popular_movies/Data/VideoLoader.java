@@ -3,6 +3,7 @@ package com.mwano.lauren.popular_movies.Data;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.AsyncTaskLoader;
+import android.util.Log;
 
 import com.mwano.lauren.popular_movies.model.Movie;
 import com.mwano.lauren.popular_movies.model.Video;
@@ -20,6 +21,7 @@ public class VideoLoader extends AsyncTaskLoader<ArrayList<Video>> {
     public static final String MOVIE_ID = "movie_id";
     Bundle mArgs;
     ArrayList<Video> mVideoData;
+    private static final String TAG = VideoLoader.class.getSimpleName();
 
     // Constructor
     public VideoLoader(Context context, Bundle args) {
@@ -42,22 +44,19 @@ public class VideoLoader extends AsyncTaskLoader<ArrayList<Video>> {
    // TODO rethink / modify
     @Override
     public ArrayList<Video> loadInBackground() {
-        String movieId = mArgs.getString(MOVIE_ID);
+        //String movieId = mArgs.getString(MOVIE_ID);
+        String currentId = String.valueOf(getId());
+        Log.i(TAG, "ID value is: " + currentId);
+        // ID is loader ID (??)
+        URL videoRequestUrl;
 
-        if (movieId != null && movieId.equals("")) {
+        if (currentId != null && currentId.equals("")) {
                 return null;
         }
-        URL videoRequestUrl = MovieApi.buildVideoUrl(movieId);
-        String currentId =
         try {
-            videoRequestUrl = MovieApi.buildVideoUrl(MOVIE_ID);
-
-            } else {
-                throw new UnsupportedOperationException("Unknown url: " + videoRequestUrl);
-            }
+            videoRequestUrl = MovieApi.buildVideoUrl(currentId);
             String jsonResponse = NetworkUtils.httpConnect(videoRequestUrl);
             return JsonUtils.parseVideoJson(jsonResponse);
-
         } catch (IOException e) {
             e.printStackTrace();
             return null;
