@@ -1,7 +1,6 @@
 package com.mwano.lauren.popular_movies.model;
 
 import android.net.Uri;
-import android.util.Log;
 
 public class Video {
 
@@ -63,6 +62,11 @@ public class Video {
 
     public void setVideoKey(String videoKey) {
         mVideoKey = videoKey;
+    }
+
+    @Override
+    public String toString() {
+        return mVideoName + "--" + mVideoKey + "--";
     }
 
     public static Uri buildVideoThumbnailPath (Video video) {

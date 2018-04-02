@@ -142,7 +142,7 @@ public class DetailActivity extends AppCompatActivity
 //                    .into(mVideoThumbnail);
             // Image displays fine with fixed path
             Log.i(TAG, "This is the path: "+ Video.buildVideoThumbnailPath(currentVideo));
-            // video key part is missing from the path, because URL in VideoLoader is wrong
+            // video key part is missing from the path, because output from loader is wrong ??
         } else {
             //showConnectionErrorMessage();
             Log.i(TAG, "Error displaying videos");
