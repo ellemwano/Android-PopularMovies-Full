@@ -86,6 +86,19 @@ public class DetailActivity extends AppCompatActivity
                 mReleaseView.setText(currentMovie.getReleaseDate());
                 mRatingView.setText(String.valueOf(currentMovie.getRating()));
                 setTitle(currentMovie.getOriginalTitle());
+
+                // TODO check
+                // Video loader bundle
+                Bundle videoBundle = new Bundle();
+                String movieId = String.valueOf(currentMovie.getId());
+                Log.i(TAG, "CurrentMovie ID is: " + movieId);
+                // ID is correct
+                videoBundle.putString(MOVIE_ID, movieId);
+
+                // Initialise Video loader
+//        LoaderManager loaderManager = getSupportLoaderManager();
+//        Loader<ArrayList<Video>> videoLoader = loaderManager.getLoader(VIDEO_QUERY_LOADER);
+                getSupportLoaderManager().initLoader(VIDEO_QUERY_LOADER, videoBundle, DetailActivity.this);
             }
         }
 
@@ -108,18 +121,7 @@ public class DetailActivity extends AppCompatActivity
 //        mVideoRecyclerView.setAdapter(mVideoAdapter);
 
 
-        // TODO check
-        // Video loader bundle
-        Bundle videoBundle = new Bundle();
-        // static getId()
-        String movieId = String.valueOf(currentMovie.getId());
-        Log.i(TAG, "CurrentMovie ID is: " + movieId);
-        videoBundle.putString(MOVIE_ID, movieId);
 
-        // Initialise Video loader
-//        LoaderManager loaderManager = getSupportLoaderManager();
-//        Loader<ArrayList<Video>> videoLoader = loaderManager.getLoader(VIDEO_QUERY_LOADER);
-        getSupportLoaderManager().initLoader(VIDEO_QUERY_LOADER, videoBundle, DetailActivity.this);
     }
 
     // Create new VideoLoader

@@ -34,8 +34,7 @@ public class Movie implements Parcelable {
 //                "vote_average": 5.91
 //        },
 
-    // static
-    private static int mId;
+    private int mId;
     private String mImagePath;
     private String mBackdropPath;
     private String mOriginalTitle;
@@ -49,7 +48,6 @@ public class Movie implements Parcelable {
     public Movie
             (int id, String imagePath, String backdropPath, String originalTitle, String synopsis, String releaseDate,
              Double rating) {
-        // static
         mId = id;
         mImagePath = imagePath;
         mBackdropPath = backdropPath;
@@ -59,12 +57,11 @@ public class Movie implements Parcelable {
         mRating = rating;
     }
 
-    public static int getId() {
+    public int getId() {
         return mId;
     }
 
     public void setId(int id) {
-        // static
         mId = id;
     }
 

@@ -65,6 +65,7 @@ public class MovieApi {
             e.printStackTrace();
         }
         Log.i(TAG, "Built videoURI " + url);
+        //URL is correct
         return url;
     }
 }

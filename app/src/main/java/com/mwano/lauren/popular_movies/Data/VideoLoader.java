@@ -44,17 +44,16 @@ public class VideoLoader extends AsyncTaskLoader<ArrayList<Video>> {
    // TODO rethink / modify
     @Override
     public ArrayList<Video> loadInBackground() {
-        //String movieId = mArgs.getString(MOVIE_ID);
-        String currentId = String.valueOf(getId());
-        Log.i(TAG, "ID value is: " + currentId);
-        // ID is loader ID (??)
+        String movieId = mArgs.getString(MOVIE_ID);
+        Log.i(TAG, "ID value is: " + movieId);
+        // ID is correct
         URL videoRequestUrl;
 
-        if (currentId != null && currentId.equals("")) {
+        if (movieId != null && movieId.equals("")) {
                 return null;
         }
         try {
-            videoRequestUrl = MovieApi.buildVideoUrl(currentId);
+            videoRequestUrl = MovieApi.buildVideoUrl(movieId);
             String jsonResponse = NetworkUtils.httpConnect(videoRequestUrl);
             return JsonUtils.parseVideoJson(jsonResponse);
         } catch (IOException e) {
