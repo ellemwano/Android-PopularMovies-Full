@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.mwano.lauren.popular_movies.R;
 import com.mwano.lauren.popular_movies.model.Video;
@@ -46,11 +47,9 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
     public void onBindViewHolder(VideoAdapter.VideoViewHolder videoViewHolder, int position) {
         mContext = videoViewHolder.mVideoImageView.getContext();
         Video mCurrentVideo = mVideos.get(position);
-        //TODO modify
         Picasso.with(mContext).load(Video.buildVideoThumbnailPath(mCurrentVideo))
                 .into(videoViewHolder.mVideoImageView);
-//        Picasso.with(mContext).load("https://i1.ytimg.com/vi/zB4I68XVPzQ/0.jpg")
-//                .into(videoViewHolder.mVideoImageView);
+        videoViewHolder.mVideoTitleView.setText(mCurrentVideo.getVideoName());
     }
 
     @Override
@@ -67,14 +66,15 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
     /**
      * Create a ViewHolder with a click listener
      */
-    public class VideoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
-    {
+    public class VideoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public final ImageView mVideoImageView;
+        public final TextView mVideoTitleView;
 
         public VideoViewHolder(View view) {
             super(view);
             mVideoImageView = (ImageView)view.findViewById(R.id.video_thumbnail);
+            mVideoTitleView = (TextView)view.findViewById(R.id.video_title);
             view.setOnClickListener(this);
         }
 

@@ -54,7 +54,7 @@ public class VideoLoader extends AsyncTaskLoader<ArrayList<Video>> {
             videoRequestUrl = MovieApi.buildVideoUrl(movieId);
             // This URL is fine. Check logCat from MovieApi
             String jsonResponse = NetworkUtils.httpConnect(videoRequestUrl);
-            Log.i(TAG, JsonUtils.parseVideoJson(jsonResponse).toString());
+            //Log.i(TAG, JsonUtils.parseVideoJson(jsonResponse).toString());
             // All good
             return JsonUtils.parseVideoJson(jsonResponse);
         } catch (IOException e) {

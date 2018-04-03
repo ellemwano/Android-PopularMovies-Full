@@ -46,8 +46,6 @@ public class DetailActivity extends AppCompatActivity
     private TextView mSynopsisView;
     private TextView mReleaseView;
     private TextView mRatingView;
-    private TextView mVideoTitle;
-    private ImageView mVideoThumbnail;
     ArrayList<Video> videos;
     public Movie currentMovie;
     private RecyclerView mVideoRecyclerView;
@@ -69,8 +67,6 @@ public class DetailActivity extends AppCompatActivity
         mSynopsisView = (TextView) findViewById(R.id.synopsis_tv);
         mReleaseView = (TextView) findViewById(R.id.release_date_tv);
         mRatingView = (TextView) findViewById(R.id.rating_tv);
-        mVideoTitle = (TextView) findViewById(R.id.video_tv);
-        mVideoThumbnail = (ImageView) findViewById(R.id.video_thumbnail);
 
         // Details intent from Movies grid
         Intent intentThatStartedThisActivity = getIntent();
@@ -129,11 +125,6 @@ public class DetailActivity extends AppCompatActivity
     public void onLoadFinished(Loader<ArrayList<Video>> loader, ArrayList<Video> videos) {
         if (videos != null) {
              mVideoAdapter.setVideoData(videos);
-//            Video currentVideo = videos.get(0);
-//            Picasso.with(this).load(Video.buildVideoThumbnailPath(currentVideo))
-//                    .into(mVideoThumbnail);
-            //Log.i(TAG, "This is the path: "+ Video.buildVideoThumbnailPath(currentVideo));
-            // Path all good (fixed)
         } else {
             //showConnectionErrorMessage();
             Log.i(TAG, "Error displaying videos");
@@ -156,15 +147,4 @@ public class DetailActivity extends AppCompatActivity
         }
         return super.onOptionsItemSelected(item);
     }
-
-    // TODO set these 2
-//    private void showMovieDataView() {
-//        mDownloadErrorMessageDisplay.setVisibility(View.INVISIBLE);
-//        mVideoRecyclerView.setVisibility(View.VISIBLE);
-//    }
-//
-//    private void showConnectionErrorMessage() {
-//        mVideoRecyclerView.setVisibility(View.INVISIBLE);
-//        mDownloadErrorMessageDisplay.setVisibility(View.VISIBLE);
-//    }
 }
