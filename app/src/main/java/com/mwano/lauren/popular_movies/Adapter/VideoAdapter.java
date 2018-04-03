@@ -47,10 +47,10 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
         mContext = videoViewHolder.mVideoImageView.getContext();
         Video mCurrentVideo = mVideos.get(position);
         //TODO modify
-//        Picasso.with(mContext).load(Video.buildVideoThumbnailPath(mCurrentVideo))
-//                .into(videoViewHolder.mVideoImageView);
-        Picasso.with(mContext).load("https://i1.ytimg.com/vi/zB4I68XVPzQ/0.jpg")
+        Picasso.with(mContext).load(Video.buildVideoThumbnailPath(mCurrentVideo))
                 .into(videoViewHolder.mVideoImageView);
+//        Picasso.with(mContext).load("https://i1.ytimg.com/vi/zB4I68XVPzQ/0.jpg")
+//                .into(videoViewHolder.mVideoImageView);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
 
         public VideoViewHolder(View view) {
             super(view);
-            mVideoImageView = (ImageView)view.findViewById(R.id.video_image);
+            mVideoImageView = (ImageView)view.findViewById(R.id.video_thumbnail);
             view.setOnClickListener(this);
         }
 

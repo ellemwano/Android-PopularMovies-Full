@@ -40,8 +40,6 @@ public class VideoLoader extends AsyncTaskLoader<ArrayList<Video>> {
         }
     }
 
-
-   // TODO rethink / modify
     @Override
     public ArrayList<Video> loadInBackground() {
         String movieId = mArgs.getString(MOVIE_ID);
@@ -57,7 +55,7 @@ public class VideoLoader extends AsyncTaskLoader<ArrayList<Video>> {
             // This URL is fine. Check logCat from MovieApi
             String jsonResponse = NetworkUtils.httpConnect(videoRequestUrl);
             Log.i(TAG, JsonUtils.parseVideoJson(jsonResponse).toString());
-            // No values. Parsing problem ??
+            // All good
             return JsonUtils.parseVideoJson(jsonResponse);
         } catch (IOException e) {
             e.printStackTrace();

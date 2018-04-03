@@ -86,19 +86,6 @@ public class DetailActivity extends AppCompatActivity
                 mReleaseView.setText(currentMovie.getReleaseDate());
                 mRatingView.setText(String.valueOf(currentMovie.getRating()));
                 setTitle(currentMovie.getOriginalTitle());
-
-                // TODO check
-                // Video loader bundle
-                Bundle videoBundle = new Bundle();
-                String movieId = String.valueOf(currentMovie.getId());
-                Log.i(TAG, "CurrentMovie ID is: " + movieId);
-                // ID is correct
-                videoBundle.putString(MOVIE_ID, movieId);
-
-                // Initialise Video loader
-//        LoaderManager loaderManager = getSupportLoaderManager();
-//        Loader<ArrayList<Video>> videoLoader = loaderManager.getLoader(VIDEO_QUERY_LOADER);
-                getSupportLoaderManager().initLoader(VIDEO_QUERY_LOADER, videoBundle, DetailActivity.this);
             }
         }
 
@@ -108,20 +95,28 @@ public class DetailActivity extends AppCompatActivity
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-//        // Get reference to VideoRecyclerView
-//        mVideoRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_videos);
-//        // TODO set error view
-//        // Get reference to error TextView
-//        //mDownloadErrorMessageDisplay = (TextView) findViewById(R.id.);
-//        mVideoRecyclerView.setLayoutManager(new LinearLayoutManager
-//                (this, LinearLayoutManager.HORIZONTAL, false));
-//        mVideoRecyclerView.setHasFixedSize(true);
-//        // Create new Adapter and set to RecyclerView in layout
-//        mVideoAdapter = new VideoAdapter(this, videos, this);
-//        mVideoRecyclerView.setAdapter(mVideoAdapter);
+        // Get reference to VideoRecyclerView
+        mVideoRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_videos);
+        // TODO set error view
+        // Get reference to error TextView
+        //mDownloadErrorMessageDisplay = (TextView) findViewById(R.id.);
+        mVideoRecyclerView.setLayoutManager(new LinearLayoutManager
+                (this, LinearLayoutManager.HORIZONTAL, false));
+        mVideoRecyclerView.setHasFixedSize(true);
+        // Create new Adapter and set to RecyclerView in layout
+        mVideoAdapter = new VideoAdapter(this, videos, this);
+        mVideoRecyclerView.setAdapter(mVideoAdapter);
 
+        // TODO check
+        // Video loader bundle
+        Bundle videoBundle = new Bundle();
+        String movieId = String.valueOf(currentMovie.getId());
+        Log.i(TAG, "CurrentMovie ID is: " + movieId);
+        // ID is correct
+        videoBundle.putString(MOVIE_ID, movieId);
 
-
+        // Initialise Video loader
+        getSupportLoaderManager().initLoader(VIDEO_QUERY_LOADER, videoBundle, DetailActivity.this);
     }
 
     // Create new VideoLoader
@@ -130,35 +125,27 @@ public class DetailActivity extends AppCompatActivity
         return new VideoLoader(DetailActivity.this, args);
     }
 
-    // Set Movie data to the adapter
+    // Set Video data to the adapter
     @Override
     public void onLoadFinished(Loader<ArrayList<Video>> loader, ArrayList<Video> videos) {
         if (videos != null) {
-            // mVideoAdapter.setVideoData(videos);
-            Video currentVideo = videos.get(0);
-            Picasso.with(this).load(Video.buildVideoThumbnailPath(currentVideo))
-                    .into(mVideoThumbnail);
-//            Picasso.with(this).load("https://i1.ytimg.com/vi/mPcbm-5MAPA/0.jpg")
+             mVideoAdapter.setVideoData(videos);
+//            Video currentVideo = videos.get(0);
+//            Picasso.with(this).load(Video.buildVideoThumbnailPath(currentVideo))
 //                    .into(mVideoThumbnail);
-            // Image displays fine with fixed path
-            Log.i(TAG, "This is the path: "+ Video.buildVideoThumbnailPath(currentVideo));
-            // video key part is missing from the path, because output from loader is wrong ??
+            //Log.i(TAG, "This is the path: "+ Video.buildVideoThumbnailPath(currentVideo));
+            // Path all good (fixed)
         } else {
             //showConnectionErrorMessage();
             Log.i(TAG, "Error displaying videos");
         }
-    }
-
-    // Reset Video loader
+    } // Reset VideoLoader
     @Override
     public void onLoaderReset(Loader<ArrayList<Video>> loader) {
     }
 
-
-
     @Override
     public void onClick(Video currentVideo) {
-
     }
 
     @Override
@@ -169,13 +156,6 @@ public class DetailActivity extends AppCompatActivity
         }
         return super.onOptionsItemSelected(item);
     }
-
-//    private void loadVideoData(String movieId) {
-//        Picasso.with(this).load(Video.buildVideoThumbnailPath(curre))
-//                .into(mVideoThumbnail);
-//        Picasso.with(this).load("https://i1.ytimg.com/vi/zB4I68XVPzQ/0.jpg")
-//                .into(mVideoThumbnail);
-//    }
 
     // TODO set these 2
 //    private void showMovieDataView() {
