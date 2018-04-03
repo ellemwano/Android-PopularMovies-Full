@@ -107,7 +107,6 @@ public class DetailActivity extends AppCompatActivity
         mVideoAdapter = new VideoAdapter(this, videos, this);
         mVideoRecyclerView.setAdapter(mVideoAdapter);
 
-        // TODO check
         // Video loader bundle
         Bundle videoBundle = new Bundle();
         String movieId = String.valueOf(currentMovie.getId());
@@ -139,6 +138,7 @@ public class DetailActivity extends AppCompatActivity
             //showConnectionErrorMessage();
             Log.i(TAG, "Error displaying videos");
         }
+
     } // Reset VideoLoader
     @Override
     public void onLoaderReset(Loader<ArrayList<Video>> loader) {

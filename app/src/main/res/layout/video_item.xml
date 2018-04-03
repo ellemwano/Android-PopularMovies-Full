@@ -8,8 +8,10 @@
 
     <ImageView
         android:id="@+id/video_thumbnail"
-        android:layout_width="0dp"
-        android:layout_height="180dp"
-        app:layout_constraintDimensionRatio="16:9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:background="#000000"
         android:contentDescription="@string/trailer_video" />
 </android.support.constraint.ConstraintLayout>
