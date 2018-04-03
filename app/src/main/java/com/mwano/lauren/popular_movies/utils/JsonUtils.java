@@ -27,8 +27,8 @@ public class JsonUtils {
     private static final String OVERVIEW = "overview";
     private static final String RELEASE_DATE = "release_date";
     private static final String VOTE_AVERAGE = "vote_average";
-    private static final String VIDEO_NAME = "video_name";
-    private static final String VIDEO_KEY = "video_key";
+    private static final String VIDEO_NAME = "name";
+    private static final String VIDEO_KEY = "key";
     private static final String TAG = JsonUtils.class.getSimpleName();
 
     private JsonUtils() {
