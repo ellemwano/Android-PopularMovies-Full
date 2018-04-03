@@ -30,8 +30,8 @@ public class Video {
 //    ]
 //    }
 
-// https://api.themoviedb.org/3/movie/(movieId)/videos?
-// api_key=(API_KEY)&language=en-US
+// https://api.themoviedb.org/3/movie/(movie_id)/videos?
+// api_key=(API_KEY)
 //
 // https://www.youtube.com/watch?v=(key)      watch video
 //    https://i1.ytimg.com/vi/(key)/0.jpg    video thumbnail
