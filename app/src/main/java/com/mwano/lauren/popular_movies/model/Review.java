@@ -39,11 +39,13 @@ public class Review {
     private String mReviewId;
     private String mReviewAuthor;
     private String mReviewContent;
+    private String mReviewUrl;
 
-    public Review (String reviewId, String reviewAuthor, String reviewContent) {
+    public Review (String reviewId, String reviewAuthor, String reviewContent, String reviewUrl) {
         mReviewId = reviewId;
         mReviewAuthor = reviewAuthor;
         mReviewContent = reviewContent;
+        mReviewUrl = reviewUrl;
     }
 
     public String getReviewId() {
@@ -70,8 +72,16 @@ public class Review {
         mReviewContent = reviewContent;
     }
 
+    public String getReviewUrl() {
+        return mReviewUrl;
+    }
+
+    public void setReviewUrl(String reviewUrl) {
+        mReviewUrl = reviewUrl;
+    }
+
     @Override
     public String toString() {
-        return mReviewId + "--" + mReviewAuthor + "--" + mReviewContent + "--";
+        return mReviewId + "--" + mReviewAuthor + "--" + mReviewContent + "--" + mReviewUrl + "--";
     }
 }

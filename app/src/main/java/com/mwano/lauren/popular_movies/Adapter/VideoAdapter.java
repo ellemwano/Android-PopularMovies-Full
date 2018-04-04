@@ -28,6 +28,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
         void onClick(Video currentVideo);
     }
 
+    // VideoAdapter constructor
     public VideoAdapter (Context context, ArrayList<Video> videos, VideoAdapterOnClickHandler videoClickHandler){
         mContext = context;
         mVideos = videos;
@@ -71,6 +72,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
         public final ImageView mVideoImageView;
         public final TextView mVideoTitleView;
 
+        // VideoViewHolder constructor
         public VideoViewHolder(View view) {
             super(view);
             mVideoImageView = (ImageView)view.findViewById(R.id.video_thumbnail);

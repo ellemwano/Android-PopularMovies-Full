@@ -17,10 +17,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mwano.lauren.popular_movies.Adapter.ReviewAdapter;
 import com.mwano.lauren.popular_movies.Adapter.VideoAdapter;
 import com.mwano.lauren.popular_movies.Data.MoviePosterLoader;
 import com.mwano.lauren.popular_movies.Data.VideoLoader;
 import com.mwano.lauren.popular_movies.model.Movie;
+import com.mwano.lauren.popular_movies.model.Review;
 import com.mwano.lauren.popular_movies.model.Video;
 import com.squareup.picasso.Picasso;
 
@@ -36,7 +38,7 @@ import static com.mwano.lauren.popular_movies.Data.VideoLoader.VIDEO_QUERY_LOADE
  */
 
 public class DetailActivity extends AppCompatActivity
-        implements VideoAdapter.VideoAdapterOnClickHandler,
+        implements VideoAdapter.VideoAdapterOnClickHandler, ReviewAdapter.ReviewAdapterOnClickHandler,
         LoaderManager.LoaderCallbacks<ArrayList<Video>>{
 
     private Toolbar mToolbar;
@@ -47,9 +49,12 @@ public class DetailActivity extends AppCompatActivity
     private TextView mReleaseView;
     private TextView mRatingView;
     ArrayList<Video> videos;
+    ArrayList<Review> reviews;
     public Movie currentMovie;
     private RecyclerView mVideoRecyclerView;
+    private RecyclerView mReviewRecyclerView;
     private VideoAdapter mVideoAdapter;
+    private ReviewAdapter mReviewAdapter;
     private TextView mDownloadErrorMessageDisplay;
     int id;
     private static final String TAG = DetailActivity.class.getSimpleName();
@@ -103,7 +108,14 @@ public class DetailActivity extends AppCompatActivity
         mVideoAdapter = new VideoAdapter(this, videos, this);
         mVideoRecyclerView.setAdapter(mVideoAdapter);
 
-        // Video loader bundle
+        //Get reference to Review RecyclerView
+        mReviewRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_reviews);
+        mReviewRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mReviewRecyclerView.setHasFixedSize(true);
+        mReviewAdapter = new ReviewAdapter(this, reviews,this);
+        mReviewRecyclerView.setAdapter(mReviewAdapter);
+
+        // VideoLoader bundle
         Bundle videoBundle = new Bundle();
         String movieId = String.valueOf(currentMovie.getId());
         Log.i(TAG, "CurrentMovie ID is: " + movieId);
@@ -137,6 +149,10 @@ public class DetailActivity extends AppCompatActivity
 
     @Override
     public void onClick(Video currentVideo) {
+    }
+
+    @Override
+    public void onClick(Review currentReview) {
     }
 
     @Override

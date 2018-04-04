@@ -35,6 +35,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         void onClick(Movie currentMovie);
     }
 
+    // MovieAdapter constructor
     public MovieAdapter (Context context, ArrayList<Movie> movies, MovieAdapterOnClickHandler movieClickHandler){
         mContext = context;
         mMovies = movies;
@@ -76,6 +77,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
         public final ImageView mMovieImageView;
 
+        // MovieViewHolder constructor
         public MovieViewHolder(View view) {
             super(view);
             mMovieImageView = (ImageView)view.findViewById(R.id.movie_poster);
