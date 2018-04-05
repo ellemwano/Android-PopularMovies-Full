@@ -55,6 +55,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     public void onBindViewHolder(MovieViewHolder movieViewHolder, int position) {
         mContext = movieViewHolder.mMovieImageView.getContext();
         Movie mCurrentMovie = mMovies.get(position);
+        // TODO add placeholder
         Picasso.with(mContext).load(Movie.buildFullPosterPath(mCurrentMovie))
                 .into(movieViewHolder.mMovieImageView);
     }

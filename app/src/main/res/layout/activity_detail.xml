@@ -108,7 +108,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:textColor="@color/white"
-            android:textSize="25sp"
+            android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/barrier_title"
             app:layout_constraintEnd_toStartOf="@id/guideline_vertical_end"
@@ -141,7 +141,7 @@
         <View
             android:id="@+id/line_1"
             android:layout_width="0dp"
-            android:layout_height="1dp"
+            android:layout_height="2dp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:background="#000000"
@@ -192,7 +192,7 @@
         <View
             android:id="@+id/line_2"
             android:layout_width="0dp"
-            android:layout_height="1dp"
+            android:layout_height="2dp"
             android:paddingBottom="8dp"
             android:paddingTop="8dp"
             android:background="#000000"
@@ -219,6 +219,7 @@
             android:id="@+id/recyclerview_reviews"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
             android:layout_marginLeft="12dp"
             android:layout_marginStart="12dp"
             android:orientation="vertical"
@@ -226,7 +227,5 @@
             app:layout_constraintEnd_toEndOf="@id/guideline_vertical_end"
             app:layout_constraintStart_toStartOf="@id/guideline_vertical_start"
             app:layout_constraintTop_toBottomOf="@id/review_tv" />
-
-
     </android.support.constraint.ConstraintLayout>
 </android.support.v4.widget.NestedScrollView>
