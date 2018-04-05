@@ -1,10 +1,12 @@
 package com.mwano.lauren.popular_movies;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -13,33 +15,32 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mwano.lauren.popular_movies.Adapter.ReviewAdapter;
 import com.mwano.lauren.popular_movies.Adapter.VideoAdapter;
-import com.mwano.lauren.popular_movies.Data.MoviePosterLoader;
-import com.mwano.lauren.popular_movies.Data.VideoLoader;
 import com.mwano.lauren.popular_movies.model.Movie;
 import com.mwano.lauren.popular_movies.model.Review;
 import com.mwano.lauren.popular_movies.model.Video;
+import com.mwano.lauren.popular_movies.utils.JsonUtils;
+import com.mwano.lauren.popular_movies.utils.MovieApi;
+import com.mwano.lauren.popular_movies.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
-import java.net.URI;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-import static com.mwano.lauren.popular_movies.Data.VideoLoader.MOVIE_ID;
-import static com.mwano.lauren.popular_movies.Data.VideoLoader.VIDEO_QUERY_LOADER;
+import static com.mwano.lauren.popular_movies.utils.MovieApi.REVIEW_END;
+import static com.mwano.lauren.popular_movies.utils.MovieApi.VIDEO_END;
 
 /**
  * Created by ElleMwa on 25/02/2018.
  */
 
 public class DetailActivity extends AppCompatActivity
-        implements VideoAdapter.VideoAdapterOnClickHandler, ReviewAdapter.ReviewAdapterOnClickHandler,
-        LoaderManager.LoaderCallbacks<ArrayList<Video>>{
+        implements VideoAdapter.VideoAdapterOnClickHandler, ReviewAdapter.ReviewAdapterOnClickHandler {
 
     private Toolbar mToolbar;
     private ImageView mBackdropView;
@@ -57,10 +58,147 @@ public class DetailActivity extends AppCompatActivity
     private ReviewAdapter mReviewAdapter;
     private TextView mDownloadErrorMessageDisplay;
     int id;
+    Bundle mArgs;
+    private static final String VIDEO_REVIEW_SORT = "video_review_sort";
+    private static final String MOVIE_ID = "movie_id";
     private static final String TAG = DetailActivity.class.getSimpleName();
 
+    // Implementing multiple loaders in one activity.
+    // Source code: https://stackoverflow.com/questions/15643907/multiple-loaders-in-same-activity
+    private LoaderManager.LoaderCallbacks VideoLoaderListener =
+            new LoaderManager.LoaderCallbacks<ArrayList<Video>>() {
+                @SuppressLint("StaticFieldLeak")
+                @Override
+                public Loader<ArrayList<Video>> onCreateLoader(int id, Bundle args) {
+                    return (Loader<ArrayList<Video>>) new AsyncTaskLoader<ArrayList<Video>>(DetailActivity.this) {
+
+                        Bundle mArgs;
+                        ArrayList<Video> mVideoData;
+
+                        @Override
+                        protected void onStartLoading() {
+                            if (mVideoData != null) {
+                                // Use cached data
+                                deliverResult(mVideoData);
+                            } else {
+                                // Load data as there's none
+                                forceLoad();
+                            }
+                        }
+
+                        @Override
+                        public ArrayList<Video> loadInBackground() {
+                            String movieId = mArgs.getString(MOVIE_ID);
+                            Log.i(TAG, "ID value is: " + movieId);
+                            // ID is correct
+                            String videoReviewSort = mArgs.getString(VIDEO_REVIEW_SORT);
+                            Log.i(TAG, "Sort value is: " + videoReviewSort);
+                            URL videoRequestUrl;
+
+                            if ((movieId != null && movieId.equals(""))
+                                    || (videoReviewSort != null && videoReviewSort.equals(""))) {
+                                return null;
+                            }
+                            try {
+                                videoRequestUrl = MovieApi.buildVideoReviewUrl(movieId, videoReviewSort);
+                                // This URL is fine. Check logCat from MovieApi                                }
+                                String jsonResponse = NetworkUtils.httpConnect(videoRequestUrl);
+                                //Log.i(TAG, JsonUtils.parseVideoJson(jsonResponse).toString());
+                                // All good
+                                return JsonUtils.parseVideoJson(jsonResponse);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                                return null;
+                            }
+                        }
+
+                    };
+                }
+
+                @Override
+                public void onLoaderReset(Loader<ArrayList<Video>> loader) {
+                }
+
+                @Override
+                public void onLoadFinished(Loader<ArrayList<Video>> loader, ArrayList<Video> data) {
+                    if (videos != null) {
+                        mVideoAdapter.setVideoData(videos);
+                    } else {
+                        //showConnectionErrorMessage();
+                        Log.i(TAG, "Error displaying videos");
+                    }
+                }
+            };
+
+    private LoaderManager.LoaderCallbacks ReviewLoaderListener =
+            new LoaderManager.LoaderCallbacks<ArrayList<Review>>() {
+                @SuppressLint("StaticFieldLeak")
+                @Override
+                public Loader<ArrayList<Review>> onCreateLoader(int id, Bundle args) {
+                    return (Loader<ArrayList<Review>>) new AsyncTaskLoader<ArrayList<Review>>(DetailActivity.this) {
+
+                        Bundle mArgs;
+                        ArrayList<Review> mReviewData;
+
+                        @Override
+                        protected void onStartLoading() {
+                            if (mReviewData != null) {
+                                // Use cached data
+                                deliverResult(mReviewData);
+                            } else {
+                                // Load data as there's none
+                                forceLoad();
+                            }
+                        }
+
+                        @Override
+                        public ArrayList<Review> loadInBackground() {
+                            String movieId = mArgs.getString(MOVIE_ID);
+                            Log.i(TAG, "ID value is: " + movieId);
+                            // ID is correct
+                            String videoReviewSort = mArgs.getString(VIDEO_REVIEW_SORT);
+                            Log.i(TAG, "Sort value is: " + videoReviewSort);
+                            URL reviewRequestUrl;
+
+                            if ((movieId != null && movieId.equals(""))
+                                    || (videoReviewSort != null && videoReviewSort.equals(""))) {
+                                return null;
+                            }
+                            try {
+                                reviewRequestUrl = MovieApi.buildVideoReviewUrl(movieId, videoReviewSort);
+                                // This URL is fine. Check logCat from MovieApi                                }
+                                String jsonResponse = NetworkUtils.httpConnect(reviewRequestUrl);
+                                //Log.i(TAG, JsonUtils.parseVideoJson(jsonResponse).toString());
+                                // All good
+                                return JsonUtils.parseReviewJson(jsonResponse);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                                return null;
+                            }
+                        }
+                    };
+                }
+
+                @Override
+                public void onLoaderReset(Loader<ArrayList<Review>> loader) {
+                }
+
+                @Override
+                public void onLoadFinished(Loader<ArrayList<Review>> loader, ArrayList<Review> data) {
+                    if (reviews != null) {
+                        mReviewAdapter.setReviewData(reviews);
+                    } else {
+                        //showConnectionErrorMessage();
+                        Log.i(TAG, "Error displaying videos");
+                    }
+                }
+            };
+
+    private static final int VIDEO_QUERY_LOADER = 20;
+    private static final int REVIEW_QUERY_LOADER = 30;
+
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         mToolbar = (Toolbar) findViewById(R.id.details_toolbar);
@@ -78,9 +216,9 @@ public class DetailActivity extends AppCompatActivity
         if (intentThatStartedThisActivity != null) {
             if (intentThatStartedThisActivity.hasExtra("movie")) {
                 currentMovie = intentThatStartedThisActivity.getParcelableExtra("movie");
-                Picasso.with(this).load(Movie.buildFullPosterPath(currentMovie))
+                Picasso.with(DetailActivity.this).load(Movie.buildFullPosterPath(currentMovie))
                         .into(mPosterView);
-                Picasso.with(this).load(Movie.buildFullBackdropPath(currentMovie))
+                Picasso.with(DetailActivity.this).load(Movie.buildFullBackdropPath(currentMovie))
                         .into(mBackdropView);
                 mTitleView.setText(currentMovie.getOriginalTitle());
                 mSynopsisView.setText(currentMovie.getSynopsis());
@@ -102,49 +240,32 @@ public class DetailActivity extends AppCompatActivity
         // Get reference to error TextView
         //mDownloadErrorMessageDisplay = (TextView) findViewById(R.id.);
         mVideoRecyclerView.setLayoutManager(new LinearLayoutManager
-                (this, LinearLayoutManager.HORIZONTAL, false));
+                (DetailActivity.this, LinearLayoutManager.HORIZONTAL, false));
         mVideoRecyclerView.setHasFixedSize(true);
         // Create new Adapter and set to RecyclerView in layout
-        mVideoAdapter = new VideoAdapter(this, videos, this);
+        mVideoAdapter = new VideoAdapter(DetailActivity.this, videos, this);
         mVideoRecyclerView.setAdapter(mVideoAdapter);
 
         //Get reference to Review RecyclerView
         mReviewRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_reviews);
-        mReviewRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mReviewRecyclerView.setLayoutManager(new LinearLayoutManager(DetailActivity.this));
         mReviewRecyclerView.setHasFixedSize(true);
-        mReviewAdapter = new ReviewAdapter(this, reviews,this);
+        mReviewAdapter = new ReviewAdapter(this, reviews, this);
         mReviewRecyclerView.setAdapter(mReviewAdapter);
 
-        // VideoLoader bundle
-        Bundle videoBundle = new Bundle();
         String movieId = String.valueOf(currentMovie.getId());
         Log.i(TAG, "CurrentMovie ID is: " + movieId);
         // ID is correct
+        // VideoLoader bundle
+        Bundle videoBundle = new Bundle();
         videoBundle.putString(MOVIE_ID, movieId);
-
-        // Initialise Video loader
-        getSupportLoaderManager().initLoader(VIDEO_QUERY_LOADER, videoBundle, DetailActivity.this);
-    }
-
-    // Create new VideoLoader
-    @Override
-    public Loader<ArrayList<Video>> onCreateLoader(int id, final Bundle args) {
-        return new VideoLoader(DetailActivity.this, args);
-    }
-
-    // Set Video data to the adapter
-    @Override
-    public void onLoadFinished(Loader<ArrayList<Video>> loader, ArrayList<Video> videos) {
-        if (videos != null) {
-             mVideoAdapter.setVideoData(videos);
-        } else {
-            //showConnectionErrorMessage();
-            Log.i(TAG, "Error displaying videos");
-        }
-
-    } // Reset VideoLoader
-    @Override
-    public void onLoaderReset(Loader<ArrayList<Video>> loader) {
+        videoBundle.putString(VIDEO_REVIEW_SORT, VIDEO_END);
+        // Initialise VideoLoader
+        getSupportLoaderManager().initLoader(VIDEO_QUERY_LOADER, videoBundle, VideoLoaderListener);
+        Bundle reviewBundle = new Bundle();
+        reviewBundle.putString(MOVIE_ID, movieId);
+        reviewBundle.putString(VIDEO_REVIEW_SORT, REVIEW_END);
+        getSupportLoaderManager().initLoader(REVIEW_QUERY_LOADER, reviewBundle, ReviewLoaderListener);
     }
 
     @Override

@@ -17,7 +17,8 @@ public class MovieApi {
     private static final String BASE_URL = "http://api.themoviedb.org/3/movie";
     private static final String API_END = "api_key";
     private static final String API_KEY = BuildConfig.API_KEY;
-    private static final String VIDEO_END = "videos";
+    public static final String VIDEO_END = "videos";
+    public static final String REVIEW_END = "reviews";
     private static final String TAG = MovieApi.class.getSimpleName();
 
 
@@ -50,12 +51,12 @@ public class MovieApi {
      * @param movieId The movie id
      * @return Request URL to the MovieDB for video trailers for a given movie
      */
-    public static URL buildVideoUrl (String movieId) {
+    public static URL buildVideoReviewUrl(String movieId, String videoReviewSort) {
 
         Uri builtVideoUri = Uri.parse(BASE_URL)
                 .buildUpon()
                 .appendPath(movieId)
-                .appendPath(VIDEO_END)
+                .appendPath(videoReviewSort)
                 .appendQueryParameter(API_END, API_KEY)
                 .build();
         URL url = null;

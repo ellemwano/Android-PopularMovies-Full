@@ -1,8 +1,11 @@
 package com.mwano.lauren.popular_movies.utils;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.mwano.lauren.popular_movies.model.Movie;
+import com.mwano.lauren.popular_movies.model.Review;
 import com.mwano.lauren.popular_movies.model.Video;
 
 import org.json.JSONArray;
@@ -29,6 +32,10 @@ public class JsonUtils {
     private static final String VOTE_AVERAGE = "vote_average";
     private static final String VIDEO_NAME = "name";
     private static final String VIDEO_KEY = "key";
+    private static final String REVIEW_ID = "id";
+    private static final String REVIEW_AUTHOR = "author";
+    private static final String REVIEW_CONTENT = "content";
+    private static final String REVIEW_URL = "url";
     private static final String TAG = JsonUtils.class.getSimpleName();
 
     private JsonUtils() {
@@ -105,7 +112,41 @@ public class JsonUtils {
         }
         return videos;
     }
-}
 
+    /**
+     *
+     * @param json
+     * @return
+     */
+    public static ArrayList<Review> parseReviewJson (String json) {
+
+        ArrayList<Review> reviews = new ArrayList<>();
+
+        try {
+            JSONObject rootObject = new JSONObject(json);
+
+            if (rootObject.has(RESULTS)) {
+                JSONArray reviewArray = rootObject.getJSONArray(RESULTS);
+
+                for (int i = 0; i < reviewArray.length(); i++) {
+                    JSONObject currentReview = reviewArray.getJSONObject(i);
+
+                    String reviewId = currentReview.optString(REVIEW_ID);
+                    String reviewAuthor = currentReview.optString(REVIEW_AUTHOR);
+                    String reviewContent = currentReview.optString(REVIEW_CONTENT);
+                    String reviewUrl = currentReview.optString(REVIEW_URL);
+
+                    Review review = new Review(reviewId, reviewAuthor, reviewContent, reviewUrl);
+                    reviews.add(review);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Problem parsing reviews json");
+            return null;
+        }
+        return reviews;
+    }
+}
 
 

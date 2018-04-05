@@ -11,7 +11,6 @@ import com.mwano.lauren.popular_movies.R;
 import com.mwano.lauren.popular_movies.model.Review;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>{
 
