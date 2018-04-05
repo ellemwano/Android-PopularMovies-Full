@@ -58,9 +58,8 @@ public class DetailActivity extends AppCompatActivity
     private ReviewAdapter mReviewAdapter;
     private TextView mDownloadErrorMessageDisplay;
     int id;
-    Bundle mArgs;
-    private static final String VIDEO_REVIEW_SORT = "video_review_sort";
-    private static final String MOVIE_ID = "movie_id";
+    public static final String VIDEO_REVIEW_SORT = "video_review_sort";
+    public static final String MOVIE_ID = "movie_id";
     private static final String TAG = DetailActivity.class.getSimpleName();
 
     // Implementing multiple loaders in one activity.
@@ -69,10 +68,10 @@ public class DetailActivity extends AppCompatActivity
             new LoaderManager.LoaderCallbacks<ArrayList<Video>>() {
                 @SuppressLint("StaticFieldLeak")
                 @Override
-                public Loader<ArrayList<Video>> onCreateLoader(int id, Bundle args) {
+                public Loader<ArrayList<Video>> onCreateLoader(int id, final Bundle args) {
                     return (Loader<ArrayList<Video>>) new AsyncTaskLoader<ArrayList<Video>>(DetailActivity.this) {
 
-                        Bundle mArgs;
+                        Bundle mArgs = args;
                         ArrayList<Video> mVideoData;
 
                         @Override
@@ -88,6 +87,9 @@ public class DetailActivity extends AppCompatActivity
 
                         @Override
                         public ArrayList<Video> loadInBackground() {
+                            if (mArgs == null) {
+                                return null;
+                            }
                             String movieId = mArgs.getString(MOVIE_ID);
                             Log.i(TAG, "ID value is: " + movieId);
                             // ID is correct
@@ -103,7 +105,7 @@ public class DetailActivity extends AppCompatActivity
                                 videoRequestUrl = MovieApi.buildVideoReviewUrl(movieId, videoReviewSort);
                                 // This URL is fine. Check logCat from MovieApi                                }
                                 String jsonResponse = NetworkUtils.httpConnect(videoRequestUrl);
-                                //Log.i(TAG, JsonUtils.parseVideoJson(jsonResponse).toString());
+                                Log.i(TAG, JsonUtils.parseVideoJson(jsonResponse).toString());
                                 // All good
                                 return JsonUtils.parseVideoJson(jsonResponse);
                             } catch (IOException e) {
@@ -111,7 +113,6 @@ public class DetailActivity extends AppCompatActivity
                                 return null;
                             }
                         }
-
                     };
                 }
 
@@ -120,7 +121,7 @@ public class DetailActivity extends AppCompatActivity
                 }
 
                 @Override
-                public void onLoadFinished(Loader<ArrayList<Video>> loader, ArrayList<Video> data) {
+                public void onLoadFinished(Loader<ArrayList<Video>> loader, ArrayList<Video> videos) {
                     if (videos != null) {
                         mVideoAdapter.setVideoData(videos);
                     } else {
@@ -134,10 +135,10 @@ public class DetailActivity extends AppCompatActivity
             new LoaderManager.LoaderCallbacks<ArrayList<Review>>() {
                 @SuppressLint("StaticFieldLeak")
                 @Override
-                public Loader<ArrayList<Review>> onCreateLoader(int id, Bundle args) {
+                public Loader<ArrayList<Review>> onCreateLoader(int id, final Bundle args) {
                     return (Loader<ArrayList<Review>>) new AsyncTaskLoader<ArrayList<Review>>(DetailActivity.this) {
 
-                        Bundle mArgs;
+                        Bundle mArgs = args;
                         ArrayList<Review> mReviewData;
 
                         @Override
@@ -153,6 +154,9 @@ public class DetailActivity extends AppCompatActivity
 
                         @Override
                         public ArrayList<Review> loadInBackground() {
+                            if (mArgs == null) {
+                                return null;
+                            }
                             String movieId = mArgs.getString(MOVIE_ID);
                             Log.i(TAG, "ID value is: " + movieId);
                             // ID is correct
@@ -168,7 +172,7 @@ public class DetailActivity extends AppCompatActivity
                                 reviewRequestUrl = MovieApi.buildVideoReviewUrl(movieId, videoReviewSort);
                                 // This URL is fine. Check logCat from MovieApi                                }
                                 String jsonResponse = NetworkUtils.httpConnect(reviewRequestUrl);
-                                //Log.i(TAG, JsonUtils.parseVideoJson(jsonResponse).toString());
+                                Log.i(TAG, JsonUtils.parseVideoJson(jsonResponse).toString());
                                 // All good
                                 return JsonUtils.parseReviewJson(jsonResponse);
                             } catch (IOException e) {
@@ -184,12 +188,12 @@ public class DetailActivity extends AppCompatActivity
                 }
 
                 @Override
-                public void onLoadFinished(Loader<ArrayList<Review>> loader, ArrayList<Review> data) {
+                public void onLoadFinished(Loader<ArrayList<Review>> loader, ArrayList<Review> reviews) {
                     if (reviews != null) {
                         mReviewAdapter.setReviewData(reviews);
                     } else {
                         //showConnectionErrorMessage();
-                        Log.i(TAG, "Error displaying videos");
+                        Log.i(TAG, "Error displaying reviews");
                     }
                 }
             };
