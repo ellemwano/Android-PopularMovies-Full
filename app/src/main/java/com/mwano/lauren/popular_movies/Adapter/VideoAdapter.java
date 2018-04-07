@@ -25,7 +25,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
      * Create an OnClickHandler interface
      */
     public interface VideoAdapterOnClickHandler {
-        void onClick(Video currentVideo);
+        void onClickVideo(Video currentVideo);
     }
 
     // VideoAdapter constructor
@@ -85,7 +85,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             Video currentVideo = mVideos.get(adapterPosition);
-            mVideoClickHandler.onClick(currentVideo);
+            mVideoClickHandler.onClickVideo(currentVideo);
         }
     }
 }

@@ -22,7 +22,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
      * Create an OnClickHandler interface
      */
     public interface ReviewAdapterOnClickHandler {
-        void onClick(Review currentReview);
+        void onClickReview(Review currentReview);
     }
 
     // ReviewAdapter constructor
@@ -81,7 +81,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             Review currentReview = mReviews.get(adapterPosition);
-            mReviewClickHandler.onClick(currentReview);
+            mReviewClickHandler.onClickReview(currentReview);
         }
     }
 }

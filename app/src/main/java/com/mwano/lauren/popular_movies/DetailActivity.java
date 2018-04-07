@@ -272,12 +272,17 @@ public class DetailActivity extends AppCompatActivity
         getSupportLoaderManager().initLoader(REVIEW_QUERY_LOADER, reviewBundle, ReviewLoaderListener);
     }
 
+    // Implicit intent to play YouTube Video trailers from video URI
     @Override
-    public void onClick(Video currentVideo) {
+    public void onClickVideo(Video currentVideo) {
+        Intent intentPlayVideo = new Intent(Intent.ACTION_VIEW, Video.buildYouTubePath(currentVideo));
+        if(intentPlayVideo.resolveActivity(getPackageManager()) != null) {
+            startActivity(intentPlayVideo);
+        }
     }
 
     @Override
-    public void onClick(Review currentReview) {
+    public void onClickReview(Review currentReview) {
     }
 
     @Override

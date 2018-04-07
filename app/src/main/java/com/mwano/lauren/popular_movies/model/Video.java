@@ -1,6 +1,7 @@
 package com.mwano.lauren.popular_movies.model;
 
 import android.net.Uri;
+import android.util.Log;
 
 public class Video {
 
@@ -41,6 +42,8 @@ public class Video {
 
     private static final String BASE_VIDEO_THUMBNAIL_PATH = "https://i1.ytimg.com/vi";
     private static final String END_VIDEO_THUMBNAIL_PATH = "0.jpg";
+    private static final String BASE_YOU_TUBE_PATH = "https://www.youtube.com/watch";
+    private static final String TAG = Video.class.getSimpleName();
 
 
     public Video (String videoName, String videoKey) {
@@ -80,8 +83,25 @@ public class Video {
                     .build();
         } catch (Exception e) {
             e.printStackTrace();
+            Log.i(TAG, "Problem building video thumbnail uri");
         }
         return builtVideoThumbnailUri;
+    }
+
+    public static Uri buildYouTubePath (Video video) {
+        Uri builtYouTubeUri = null;
+        String keySort = video.getVideoKey();
+        try {
+            builtYouTubeUri = Uri.parse(BASE_YOU_TUBE_PATH)
+                    .buildUpon()
+                    .appendQueryParameter("v", keySort)
+                    .build();
+            Log.i(TAG, "YouTube uri is : " + builtYouTubeUri);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.i(TAG, "Problem building YouTube Uri");
+        }
+        return builtYouTubeUri;
     }
 
 }
