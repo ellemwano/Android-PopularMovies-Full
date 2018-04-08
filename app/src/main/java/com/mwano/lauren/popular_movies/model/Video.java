@@ -45,7 +45,7 @@ public class Video {
     private static final String BASE_YOU_TUBE_PATH = "https://www.youtube.com/watch";
     private static final String TAG = Video.class.getSimpleName();
 
-
+    // Constructor
     public Video (String videoName, String videoKey) {
         mVideoName = videoName;
         mVideoKey = videoKey;
@@ -72,6 +72,11 @@ public class Video {
         return mVideoName + "--" + mVideoKey + "--";
     }
 
+    /**
+     * Build the uri for the YouTube video thumbnail to be displayed
+     * @param video The given video
+     * @return The uri to the YouTube thumbnail for the given video
+     */
     public static Uri buildVideoThumbnailPath (Video video) {
         Uri builtVideoThumbnailUri = null;
         String keySort = video.getVideoKey();
@@ -88,6 +93,11 @@ public class Video {
         return builtVideoThumbnailUri;
     }
 
+    /**
+     Build the uri for the YouTube video to be played
+     * @param video The given video
+     * @return The uri of the given video on YouTube
+     */
     public static Uri buildYouTubePath (Video video) {
         Uri builtYouTubeUri = null;
         String keySort = video.getVideoKey();

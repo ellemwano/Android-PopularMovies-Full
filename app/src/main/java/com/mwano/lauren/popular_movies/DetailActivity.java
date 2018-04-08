@@ -15,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -56,6 +57,8 @@ public class DetailActivity extends AppCompatActivity
     private RecyclerView mReviewRecyclerView;
     private VideoAdapter mVideoAdapter;
     private ReviewAdapter mReviewAdapter;
+    private int mVideoNumber;
+    private ImageView mArrowMore;
     private TextView mDownloadErrorMessageDisplay;
     int id;
     public static final String VIDEO_REVIEW_SORT = "video_review_sort";
@@ -124,6 +127,11 @@ public class DetailActivity extends AppCompatActivity
                 public void onLoadFinished(Loader<ArrayList<Video>> loader, ArrayList<Video> videos) {
                     if (videos != null) {
                         mVideoAdapter.setVideoData(videos);
+                        // Display "more" arrow icon if number of videos >2 in portrait and >3 in landscape
+                        mVideoNumber = (int) getResources().getInteger(R.integer.num_of_videos);
+                        if (videos.size() > mVideoNumber) {
+                            mArrowMore.setVisibility(View.VISIBLE);
+                        }
                     } else {
                         //showConnectionErrorMessage();
                         Log.i(TAG, "Error displaying videos");
@@ -214,6 +222,7 @@ public class DetailActivity extends AppCompatActivity
         mSynopsisView = (TextView) findViewById(R.id.synopsis_tv);
         mReleaseView = (TextView) findViewById(R.id.release_date_tv);
         mRatingView = (TextView) findViewById(R.id.rating_tv);
+        mArrowMore = (ImageView) findViewById(R.id.arrow_right);
 
         // Details intent from Movies grid
         Intent intentThatStartedThisActivity = getIntent();
