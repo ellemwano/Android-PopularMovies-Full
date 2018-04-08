@@ -2,6 +2,7 @@ package com.mwano.lauren.popular_movies;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
@@ -290,8 +291,15 @@ public class DetailActivity extends AppCompatActivity
         }
     }
 
+    // TODO Implement expanding TextView
+    // Implicit intent to show full Review on webpage
     @Override
     public void onClickReview(Review currentReview) {
+        String currentReviewUrl = currentReview.getReviewUrl();
+        Intent intentOpenReview = new Intent(Intent.ACTION_VIEW, Uri.parse(currentReviewUrl));
+        if(intentOpenReview.resolveActivity(getPackageManager()) != null) {
+            startActivity(intentOpenReview);
+        }
     }
 
     @Override
