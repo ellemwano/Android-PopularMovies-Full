@@ -86,19 +86,20 @@
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="17sp"
-            app:layout_constraintEnd_toStartOf="@id/favourite"
+            app:layout_constraintEnd_toStartOf="@id/fab"
             app:layout_constraintTop_toBottomOf="@id/backdrop_iv"
             tools:text="8.0" />
 
-        <ImageView
-            android:id="@+id/favourite"
-            android:layout_width="0dp"
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_details_favourite_border"
-            android:paddingLeft="8dp"
-            android:paddingStart="8dp"
+            android:layout_gravity="end|center"
+            app:backgroundTint="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="@id/backdrop_iv"
             app:layout_constraintEnd_toStartOf="@id/guideline_vertical_end"
-            app:layout_constraintTop_toBottomOf="@id/backdrop_iv" />
+            app:layout_constraintTop_toBottomOf="@id/backdrop_iv"
+            app:srcCompat="@drawable/ic_favorite_full" />
 
         <TextView
             android:id="@+id/original_title_tv"
@@ -144,7 +145,7 @@
             android:layout_height="2dp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
-            android:background="#000000"
+            android:background="#050505"
             app:layout_constraintTop_toBottomOf="@id/synopsis_tv"
             app:layout_constraintStart_toStartOf="@id/guideline_vertical_start"
             app:layout_constraintEnd_toEndOf="@id/guideline_vertical_end"/>
@@ -196,7 +197,7 @@
             android:layout_height="2dp"
             android:paddingBottom="8dp"
             android:paddingTop="8dp"
-            android:background="#000000"
+            android:background="#050505"
             app:layout_constraintTop_toBottomOf="@id/recyclerview_videos"
             app:layout_constraintStart_toStartOf="@id/guideline_vertical_start"
             app:layout_constraintEnd_toEndOf="@id/guideline_vertical_end"/>
@@ -228,5 +229,8 @@
             app:layout_constraintEnd_toEndOf="@id/guideline_vertical_end"
             app:layout_constraintStart_toStartOf="@id/guideline_vertical_start"
             app:layout_constraintTop_toBottomOf="@id/review_tv" />
+
+
+
     </android.support.constraint.ConstraintLayout>
 </android.support.v4.widget.NestedScrollView>

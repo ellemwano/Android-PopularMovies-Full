@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.AsyncTaskLoader;
@@ -62,6 +64,7 @@ public class DetailActivity extends AppCompatActivity
     private ImageView mArrowMore;
     private TextView mDownloadErrorMessageDisplay;
     int id;
+    private FloatingActionButton fab;
     public static final String VIDEO_REVIEW_SORT = "video_review_sort";
     public static final String MOVIE_ID = "movie_id";
     private static final String TAG = DetailActivity.class.getSimpleName();
@@ -280,6 +283,18 @@ public class DetailActivity extends AppCompatActivity
         reviewBundle.putString(MOVIE_ID, movieId);
         reviewBundle.putString(VIDEO_REVIEW_SORT, REVIEW_END);
         getSupportLoaderManager().initLoader(REVIEW_QUERY_LOADER, reviewBundle, ReviewLoaderListener);
+
+        // TODO Change to toast and change colours
+        // FAB to add movie to Favourites and show messsage (currently a snackbar)
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        //fab.setImageDrawable(R.drawable.ic);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Snackbar.make(v, "Hello Snackbar!",
+                        Snackbar.LENGTH_LONG).show();
+            }
+        });
     }
 
     // Implicit intent to play YouTube Video trailers from video URI
@@ -310,4 +325,5 @@ public class DetailActivity extends AppCompatActivity
         }
         return super.onOptionsItemSelected(item);
     }
+
 }
