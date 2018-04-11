@@ -9,6 +9,7 @@ public class FavouritesContract {
     }
 
     public static final class FavouritesEntry implements BaseColumns {
+
         public static final String TABLE_NAME = "favourites";
         public static final String COLUMN_MOVIE_ID = "movieId";
         public static final String COLUMN_MOVIE_TITLE = "movieTitle";

@@ -37,4 +37,5 @@
         app:layout_constraintTop_toBottomOf="@id/video_thumbnail"
         app:layout_constraintStart_toStartOf="@id/video_thumbnail"
         app:layout_constraintEnd_toEndOf="@id/video_thumbnail"/>
+
 </android.support.constraint.ConstraintLayout>
