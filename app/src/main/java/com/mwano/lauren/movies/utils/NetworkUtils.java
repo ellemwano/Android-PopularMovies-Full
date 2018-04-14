@@ -1,4 +1,4 @@
-package com.mwano.lauren.popular_movies.utils;
+package com.mwano.lauren.movies.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;

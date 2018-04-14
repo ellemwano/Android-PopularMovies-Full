@@ -1,4 +1,4 @@
-package com.mwano.lauren.popular_movies.Adapter;
+package com.mwano.lauren.movies.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mwano.lauren.popular_movies.R;
-import com.mwano.lauren.popular_movies.model.Video;
+import com.mwano.lauren.movies.R;
+import com.mwano.lauren.movies.model.Video;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

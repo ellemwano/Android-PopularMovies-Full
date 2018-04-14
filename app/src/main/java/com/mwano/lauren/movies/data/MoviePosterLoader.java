@@ -1,20 +1,20 @@
-package com.mwano.lauren.popular_movies.Data;
+package com.mwano.lauren.movies.data;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.AsyncTaskLoader;
 
-import com.mwano.lauren.popular_movies.model.Movie;
-import com.mwano.lauren.popular_movies.utils.JsonUtils;
-import com.mwano.lauren.popular_movies.utils.MovieApi;
-import com.mwano.lauren.popular_movies.utils.NetworkUtils;
+import com.mwano.lauren.movies.model.Movie;
+import com.mwano.lauren.movies.utils.JsonUtils;
+import com.mwano.lauren.movies.utils.MovieApi;
+import com.mwano.lauren.movies.utils.NetworkUtils;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-import static com.mwano.lauren.popular_movies.MainActivity.POPULAR;
-import static com.mwano.lauren.popular_movies.MainActivity.TOP_RATED;
+import static com.mwano.lauren.movies.MainActivity.POPULAR;
+import static com.mwano.lauren.movies.MainActivity.TOP_RATED;
 
 
 /**

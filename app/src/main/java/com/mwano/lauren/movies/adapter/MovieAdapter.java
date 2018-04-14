@@ -1,4 +1,4 @@
-package com.mwano.lauren.popular_movies.Adapter;
+package com.mwano.lauren.movies.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -6,10 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.mwano.lauren.popular_movies.R;
-import com.mwano.lauren.popular_movies.model.Movie;
+import com.mwano.lauren.movies.R;
+import com.mwano.lauren.movies.model.Movie;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -56,7 +55,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         mContext = movieViewHolder.mMovieImageView.getContext();
         Movie mCurrentMovie = mMovies.get(position);
         // TODO add placeholder
-        Picasso.with(mContext).load(Movie.buildFullPosterPath(mCurrentMovie))
+        Picasso mPicasso = Picasso.with(mContext);
+        //Debug indicators
+        mPicasso.setIndicatorsEnabled(true);
+        // Load movie posters
+        mPicasso.load(Movie.buildFullPosterPath(mCurrentMovie))
                 .into(movieViewHolder.mMovieImageView);
     }
 

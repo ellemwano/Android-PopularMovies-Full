@@ -1,4 +1,4 @@
-package com.mwano.lauren.popular_movies.model;
+package com.mwano.lauren.movies.model;
 
 public class Review {
 //    {
