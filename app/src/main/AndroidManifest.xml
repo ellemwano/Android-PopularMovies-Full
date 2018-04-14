@@ -27,9 +27,10 @@
                 android:value=".MainActivity" />
         </activity>
 
+
         <provider
-            android:authorities=".data.FavouritesProvider"
-            android:name="com.mwano.lauren.movies"
+            android:name=".data.FavouritesProvider"
+            android:authorities="com.mwano.lauren.movies"
             android:exported="false" />
     </application>
 

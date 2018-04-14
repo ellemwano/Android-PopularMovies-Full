@@ -298,7 +298,7 @@ public class DetailActivity extends AppCompatActivity
         // Instantiate subclass of SQLiteOpenHelper
         mDbHelper = new FavouritesDbHelper(this);
 
-        // TODO Change to toast and change colours
+        // TODO Change to toast
         // FAB to add movie to Favourites and show messsage (currently a snackbar)
         fab = (FloatingActionButton) findViewById(R.id.fab);
         //fab.setImageDrawable(R.drawable.ic);
@@ -309,8 +309,9 @@ public class DetailActivity extends AppCompatActivity
                 addFavourite();
                 // Change colour
                 // TODO
+                fab.setImageResource(R.drawable.ic_details_favorite_full);
                 // Display message to user
-                Snackbar.make(v, "Hello Snackbar!",
+                Snackbar.make(v, "Added to Favourites!",
                         Snackbar.LENGTH_LONG).show();
             }
         });
@@ -347,7 +348,9 @@ public class DetailActivity extends AppCompatActivity
         values.put(FavouritesEntry.COLUMN_MOVIE_TITLE, currentMovie.getOriginalTitle());
         values.put(FavouritesEntry.COLUMN_RATING, currentMovie.getRating());
         values.put(FavouritesEntry.COLUMN_MOVIE_POSTER, Movie.buildFullPosterPath(currentMovie).toString());
+        values.put(FavouritesEntry.COLUMN_MOVIE_BACKDROP, Movie.buildFullBackdropPath(currentMovie).toString());
         values.put(FavouritesEntry.COLUMN_MOVIE_RELEASE_DATE, currentMovie.getReleaseDate());
+        values.put(FavouritesEntry.COLUMN_MOVIE_SYNOPSIS, currentMovie.getSynopsis());
         // Insert a new row in the database for that movie, returning an ID for that row
         long newRowId = db.insert(FavouritesEntry.TABLE_NAME, null, values);
     }
