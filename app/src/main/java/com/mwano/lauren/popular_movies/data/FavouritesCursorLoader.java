@@ -7,7 +7,8 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 
-import java.util.concurrent.ExecutionException;
+import com.mwano.lauren.popular_movies.adapter.FavouriteAdapter;
+
 
 public class FavouritesCursorLoader implements LoaderManager.LoaderCallbacks<Cursor> {
 
