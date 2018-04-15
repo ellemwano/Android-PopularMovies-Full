@@ -1,4 +1,4 @@
-package com.mwano.lauren.movies;
+package com.mwano.lauren.popular_movies;
 
 
 import android.content.Context;
@@ -21,14 +21,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
-import com.mwano.lauren.movies.adapter.MovieAdapter;
-import com.mwano.lauren.movies.data.MoviePosterLoader;
-import com.mwano.lauren.movies.model.Movie;
+import com.mwano.lauren.popular_movies.adapter.MovieAdapter;
+import com.mwano.lauren.popular_movies.data.MoviePosterLoader;
+import com.mwano.lauren.popular_movies.model.Movie;
 
 import java.util.ArrayList;
 
-import static com.mwano.lauren.movies.data.MoviePosterLoader.MOVIE_QUERY_LOADER;
-import static com.mwano.lauren.movies.data.MoviePosterLoader.SORT_QUERY;
+import static com.mwano.lauren.popular_movies.data.MoviePosterLoader.MOVIE_QUERY_LOADER;
+import static com.mwano.lauren.popular_movies.data.MoviePosterLoader.SORT_QUERY;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler,
         LoaderManager.LoaderCallbacks<ArrayList<Movie>>, NavigationView.OnNavigationItemSelectedListener {

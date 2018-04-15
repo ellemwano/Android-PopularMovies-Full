@@ -1,4 +1,4 @@
-package com.mwano.lauren.movies;
+package com.mwano.lauren.popular_movies;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

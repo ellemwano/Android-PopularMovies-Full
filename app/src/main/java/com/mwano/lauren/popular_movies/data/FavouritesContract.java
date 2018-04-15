@@ -1,4 +1,4 @@
-package com.mwano.lauren.movies.data;
+package com.mwano.lauren.popular_movies.data;
 
 import android.net.Uri;
 import android.provider.BaseColumns;
@@ -12,7 +12,7 @@ public class FavouritesContract {
     /**
      * Represents the domain
      */
-    public static final String CONTENT_AUTHORITY = "com.mwano.lauren.movies";
+    public static final String CONTENT_AUTHORITY = "com.mwano.lauren.popular_movies";
     /**
      * The base of all URIs apps will use to contact the content provider
      */

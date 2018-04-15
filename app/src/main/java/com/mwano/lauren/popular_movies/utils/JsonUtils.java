@@ -1,12 +1,12 @@
-package com.mwano.lauren.movies.utils;
+package com.mwano.lauren.popular_movies.utils;
 
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.mwano.lauren.movies.model.Movie;
-import com.mwano.lauren.movies.model.Review;
-import com.mwano.lauren.movies.model.Video;
+import com.mwano.lauren.popular_movies.model.Movie;
+import com.mwano.lauren.popular_movies.model.Review;
+import com.mwano.lauren.popular_movies.model.Video;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -1,4 +1,4 @@
-package com.mwano.lauren.movies;
+package com.mwano.lauren.popular_movies;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
@@ -23,25 +23,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.mwano.lauren.movies.adapter.ReviewAdapter;
-import com.mwano.lauren.movies.adapter.VideoAdapter;
-import com.mwano.lauren.movies.data.FavouritesContract.FavouritesEntry;
-import com.mwano.lauren.movies.data.FavouritesDbHelper;
-import com.mwano.lauren.movies.model.Movie;
-import com.mwano.lauren.movies.model.Review;
-import com.mwano.lauren.movies.model.Video;
-import com.mwano.lauren.movies.utils.JsonUtils;
-import com.mwano.lauren.movies.utils.MovieApi;
-import com.mwano.lauren.movies.utils.NetworkUtils;
+import com.mwano.lauren.popular_movies.adapter.ReviewAdapter;
+import com.mwano.lauren.popular_movies.adapter.VideoAdapter;
+import com.mwano.lauren.popular_movies.data.FavouritesContract.FavouritesEntry;
+import com.mwano.lauren.popular_movies.data.FavouritesDbHelper;
+import com.mwano.lauren.popular_movies.model.Movie;
+import com.mwano.lauren.popular_movies.model.Review;
+import com.mwano.lauren.popular_movies.model.Video;
+import com.mwano.lauren.popular_movies.utils.JsonUtils;
+import com.mwano.lauren.popular_movies.utils.MovieApi;
+import com.mwano.lauren.popular_movies.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-import static com.mwano.lauren.movies.utils.MovieApi.REVIEW_END;
-import static com.mwano.lauren.movies.utils.MovieApi.VIDEO_END;
+import static com.mwano.lauren.popular_movies.utils.MovieApi.REVIEW_END;
+import static com.mwano.lauren.popular_movies.utils.MovieApi.VIDEO_END;
 
 /**
  * Created by ElleMwa on 25/02/2018.
@@ -310,9 +311,9 @@ public class DetailActivity extends AppCompatActivity
                 // Change colour
                 // TODO
                 fab.setImageResource(R.drawable.ic_details_favorite_full);
-                // Display message to user
-                Snackbar.make(v, "Added to Favourites!",
-                        Snackbar.LENGTH_LONG).show();
+//                // Display message to user
+//                Snackbar.make(v, "Added to Favourites!",
+//                        Snackbar.LENGTH_LONG).show();
             }
         });
     }
@@ -340,8 +341,7 @@ public class DetailActivity extends AppCompatActivity
     // Add movie to Favourites
     private void addFavourite() {
         // Get the database in write mode
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-
+        //SQLiteDatabase db = mDbHelper.getWritableDatabase();
         // Create a ContentValues object with column names as the keys and movie data as the values
         ContentValues values = new ContentValues();
         values.put(FavouritesEntry.COLUMN_MOVIE_ID, currentMovie.getId());
@@ -351,8 +351,12 @@ public class DetailActivity extends AppCompatActivity
         values.put(FavouritesEntry.COLUMN_MOVIE_BACKDROP, Movie.buildFullBackdropPath(currentMovie).toString());
         values.put(FavouritesEntry.COLUMN_MOVIE_RELEASE_DATE, currentMovie.getReleaseDate());
         values.put(FavouritesEntry.COLUMN_MOVIE_SYNOPSIS, currentMovie.getSynopsis());
-        // Insert a new row in the database for that movie, returning an ID for that row
-        long newRowId = db.insert(FavouritesEntry.TABLE_NAME, null, values);
+        // IInsert the content values via a ContentResolver
+        Uri uri = getContentResolver().insert(FavouritesEntry.CONTENT_URI, values);
+        // Add a toast to confirm insertion
+        if(uri != null) {
+            Toast.makeText(getBaseContext(), uri.toString(), Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
