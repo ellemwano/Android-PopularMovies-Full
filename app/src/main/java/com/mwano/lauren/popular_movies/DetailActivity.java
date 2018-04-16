@@ -244,7 +244,7 @@ public class DetailActivity extends AppCompatActivity
                 posterPicasso.setIndicatorsEnabled(true);
                 posterPicasso.load(Movie.buildFullPosterPath(currentMovie))
                         .into(mPosterView);
-                // Load backdrop images from Picassso
+                // Load backdrop images from Picasso
                 Picasso backPicasso = Picasso.with(DetailActivity.this);
                 backPicasso.setIndicatorsEnabled(true);
                 backPicasso.load(Movie.buildFullBackdropPath(currentMovie))
@@ -300,6 +300,8 @@ public class DetailActivity extends AppCompatActivity
         mDbHelper = new FavouritesDbHelper(this);
 
         // TODO Change to toast
+        // TODO check if already Fav (set colour)
+        // TODO Add delete from Fav
         // FAB to add movie to Favourites and show messsage (currently a snackbar)
         fab = (FloatingActionButton) findViewById(R.id.fab);
         //fab.setImageDrawable(R.drawable.ic);
@@ -309,7 +311,7 @@ public class DetailActivity extends AppCompatActivity
                 // Add movie to favourite
                 addFavourite();
                 // Change colour
-                // TODO
+                // Right now reloaded as non Fav
                 fab.setImageResource(R.drawable.ic_details_favorite_full);
 //                // Display message to user
 //                Snackbar.make(v, "Added to Favourites!",
@@ -345,13 +347,13 @@ public class DetailActivity extends AppCompatActivity
         // Create a ContentValues object with column names as the keys and movie data as the values
         ContentValues values = new ContentValues();
         values.put(FavouritesEntry.COLUMN_MOVIE_ID, currentMovie.getId());
-        values.put(FavouritesEntry.COLUMN_MOVIE_TITLE, currentMovie.getOriginalTitle());
-        values.put(FavouritesEntry.COLUMN_RATING, currentMovie.getRating());
         values.put(FavouritesEntry.COLUMN_MOVIE_POSTER, Movie.buildFullPosterPath(currentMovie).toString());
         values.put(FavouritesEntry.COLUMN_MOVIE_BACKDROP, Movie.buildFullBackdropPath(currentMovie).toString());
-        values.put(FavouritesEntry.COLUMN_MOVIE_RELEASE_DATE, currentMovie.getReleaseDate());
+        values.put(FavouritesEntry.COLUMN_MOVIE_TITLE, currentMovie.getOriginalTitle());
         values.put(FavouritesEntry.COLUMN_MOVIE_SYNOPSIS, currentMovie.getSynopsis());
-        // IInsert the content values via a ContentResolver
+        values.put(FavouritesEntry.COLUMN_MOVIE_RELEASE_DATE, currentMovie.getReleaseDate());
+        values.put(FavouritesEntry.COLUMN_RATING, currentMovie.getRating());
+        // Insert the content values via a ContentResolver
         Uri uri = getContentResolver().insert(FavouritesEntry.CONTENT_URI, values);
         // Add a toast to confirm insertion
         if(uri != null) {

@@ -67,7 +67,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
      * Create an OnClickHandler interface
      */
     public interface FavouriteAdapterOnClickHandler {
-        void onClick(Movie currentMovie);
+        void onClick(Movie currentFavouriteMovie);
     }
 
     /**
@@ -96,20 +96,19 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
         private Movie queryFavourite() {
             currentFavouriteMovie.setId(mCursor.getInt(
                     mCursor.getColumnIndex(FavouritesContract.FavouritesEntry.COLUMN_MOVIE_ID)));
-            currentFavouriteMovie.setOriginalTitle(mCursor.getString(
-                    mCursor.getColumnIndex(FavouritesContract.FavouritesEntry.COLUMN_MOVIE_TITLE)));
-            currentFavouriteMovie.setRating(mCursor.getDouble(
-                    mCursor.getColumnIndex(FavouritesContract.FavouritesEntry.COLUMN_RATING)));
             currentFavouriteMovie.setImage(mCursor.getString(
                     mCursor.getColumnIndex(FavouritesContract.FavouritesEntry.COLUMN_MOVIE_POSTER)));
             currentFavouriteMovie.setBackdropImage(mCursor.getString(
                     mCursor.getColumnIndex(FavouritesContract.FavouritesEntry.COLUMN_MOVIE_BACKDROP)));
-            currentFavouriteMovie.setReleaseDate(mCursor.getString(
-                    mCursor.getColumnIndex(FavouritesContract.FavouritesEntry.COLUMN_MOVIE_RELEASE_DATE)));
+            currentFavouriteMovie.setOriginalTitle(mCursor.getString(
+                    mCursor.getColumnIndex(FavouritesContract.FavouritesEntry.COLUMN_MOVIE_TITLE)));
             currentFavouriteMovie.setSynopsis(mCursor.getString(
                     mCursor.getColumnIndex(FavouritesContract.FavouritesEntry.COLUMN_MOVIE_SYNOPSIS)));
+            currentFavouriteMovie.setReleaseDate(mCursor.getString(
+                    mCursor.getColumnIndex(FavouritesContract.FavouritesEntry.COLUMN_MOVIE_RELEASE_DATE)));
+            currentFavouriteMovie.setRating(mCursor.getDouble(
+                    mCursor.getColumnIndex(FavouritesContract.FavouritesEntry.COLUMN_RATING)));
             return currentFavouriteMovie;
-
         }
     }
 }
