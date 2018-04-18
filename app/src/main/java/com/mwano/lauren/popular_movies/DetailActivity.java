@@ -56,7 +56,6 @@ public class DetailActivity extends AppCompatActivity
         implements VideoAdapter.VideoAdapterOnClickHandler,
         ReviewAdapter.ReviewAdapterOnClickHandler {
 
-    private Context mContext;
     private Toolbar mToolbar;
     private ImageView mBackdropView;
     private ImageView mPosterView;
@@ -251,12 +250,12 @@ public class DetailActivity extends AppCompatActivity
 
                 @Override
                 public void onLoadFinished(Loader loader, Cursor cursorData) {
-                    // TODO Simplify if statement
                     try {
                         if (cursorData.getCount() < 1) {
                             mIsFavourite = false;
                             // Set FAB colour for non Favourite (heart border)
                             fab.setImageResource(R.drawable.ic_details_favourite_border);
+                            cursorData.close();
                         } else {
                             mIsFavourite = true;
                             // Set FAB colour for Favourite (heart full)
@@ -370,10 +369,9 @@ public class DetailActivity extends AppCompatActivity
             public void onClick(View v) {
                 if (mIsFavourite) {
                     //Click will remove movie from Favourites
-                    // deleteFav()
+                    removeFavourite();
                     // Click will set FAB colour to border heart
                     fab.setImageResource(R.drawable.ic_details_favourite_border);
-
                 } else {
                     // Click will add movie to Favourites
                     addFavourite();
@@ -419,11 +417,28 @@ public class DetailActivity extends AppCompatActivity
         values.put(FavouritesEntry.COLUMN_MOVIE_RELEASE_DATE, currentMovie.getReleaseDate());
         values.put(FavouritesEntry.COLUMN_RATING, currentMovie.getRating());
         // Insert the content values via a ContentResolver
-        Uri uri = getContentResolver().insert(FavouritesEntry.CONTENT_URI, values);
-        // Add a toast to confirm insertion
-        if(uri != null) {
-            Toast.makeText(DetailActivity.this,currentMovie.getOriginalTitle() + " added to Favourites", Toast.LENGTH_LONG).show();
+        try {
+            mCurrentMovieUri = getContentResolver().insert(FavouritesEntry.CONTENT_URI, values);
+            // Add a toast to confirm insertion
+            mIsFavourite = true;
+            Toast.makeText(DetailActivity.this,currentMovie.getOriginalTitle() + " is added to Favourites", Toast.LENGTH_LONG).show();
+        } catch (Exception e){
+            mCurrentMovieUri = null;
+        }
+    }
 
+    private void removeFavourite() {
+        // TODO check
+        mCurrentMovieUri = FavouritesEntry.CONTENT_URI;
+        String selection = FavouritesEntry.COLUMN_MOVIE_ID + " = ? ";
+        String[] selectionArgs = {String.valueOf(currentMovie.getId())};
+        if (mCurrentMovieUri != null) {
+            int moviesDeleted = getContentResolver().delete(mCurrentMovieUri, selection, selectionArgs);
+            if (moviesDeleted != 0) {
+                // Add a toast to confirm deletion
+                mIsFavourite = false;
+                Toast.makeText(DetailActivity.this, currentMovie.getOriginalTitle() + " is removed from Favourites", Toast.LENGTH_LONG).show();
+            }
         }
     }
 

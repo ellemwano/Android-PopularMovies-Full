@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.mwano.lauren.popular_movies.R;
 import com.mwano.lauren.popular_movies.data.FavouritesContract;
 import com.mwano.lauren.popular_movies.model.Movie;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -48,7 +49,9 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
         //Debug indicators
         mPicasso.setIndicatorsEnabled(true);
         // Load movie posters
-        mPicasso.load(mCursor.getString(mCursor.getColumnIndex(FavouritesContract.FavouritesEntry.COLUMN_MOVIE_POSTER)))
+        mPicasso.load(Movie.BASE_POSTER_PATH
+                + mCursor.getString(mCursor.getColumnIndex(FavouritesContract.FavouritesEntry.COLUMN_MOVIE_POSTER)))
+                //.networkPolicy(NetworkPolicy.OFFLINE)
                 .into(favouriteViewHolder.mMovieImageView);
     }
 
@@ -76,7 +79,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
     public class FavouriteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public final ImageView mMovieImageView;
-        private Movie currentFavouriteMovie;
+
 
         // MovieViewHolder constructor
         public FavouriteViewHolder(View view) {
@@ -93,7 +96,10 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
             mFavouriteClickHandler.onClick(queryFavourite());
         }
 
+        // Create a new Movie object from the cursor query (that will be passed as parcelable
+        // in the DetailActivity intent)
         private Movie queryFavourite() {
+            Movie currentFavouriteMovie = new Movie();
             currentFavouriteMovie.setId(mCursor.getInt(
                     mCursor.getColumnIndex(FavouritesContract.FavouritesEntry.COLUMN_MOVIE_ID)));
             currentFavouriteMovie.setImage(mCursor.getString(
