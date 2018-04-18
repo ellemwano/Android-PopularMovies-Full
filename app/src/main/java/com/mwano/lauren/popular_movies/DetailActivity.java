@@ -2,7 +2,9 @@ package com.mwano.lauren.popular_movies;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +38,7 @@ import com.mwano.lauren.popular_movies.model.Video;
 import com.mwano.lauren.popular_movies.utils.JsonUtils;
 import com.mwano.lauren.popular_movies.utils.MovieApi;
 import com.mwano.lauren.popular_movies.utils.NetworkUtils;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -49,8 +53,10 @@ import static com.mwano.lauren.popular_movies.utils.MovieApi.VIDEO_END;
  */
 
 public class DetailActivity extends AppCompatActivity
-        implements VideoAdapter.VideoAdapterOnClickHandler, ReviewAdapter.ReviewAdapterOnClickHandler {
+        implements VideoAdapter.VideoAdapterOnClickHandler,
+        ReviewAdapter.ReviewAdapterOnClickHandler {
 
+    private Context mContext;
     private Toolbar mToolbar;
     private ImageView mBackdropView;
     private ImageView mPosterView;
@@ -71,6 +77,8 @@ public class DetailActivity extends AppCompatActivity
     int id;
     private FloatingActionButton fab;
     private FavouritesDbHelper mDbHelper;
+    private boolean mIsFavourite;
+    private Uri mCurrentMovieUri;
     public static final String VIDEO_REVIEW_SORT = "video_review_sort";
     public static final String MOVIE_ID = "movie_id";
     private static final String TAG = DetailActivity.class.getSimpleName();
@@ -82,7 +90,8 @@ public class DetailActivity extends AppCompatActivity
                 @SuppressLint("StaticFieldLeak")
                 @Override
                 public Loader<ArrayList<Video>> onCreateLoader(int id, final Bundle args) {
-                    return (Loader<ArrayList<Video>>) new AsyncTaskLoader<ArrayList<Video>>(DetailActivity.this) {
+                    return (Loader<ArrayList<Video>>)
+                            new AsyncTaskLoader<ArrayList<Video>>(DetailActivity.this) {
 
                         Bundle mArgs = args;
                         ArrayList<Video> mVideoData;
@@ -154,7 +163,8 @@ public class DetailActivity extends AppCompatActivity
                 @SuppressLint("StaticFieldLeak")
                 @Override
                 public Loader<ArrayList<Review>> onCreateLoader(int id, final Bundle args) {
-                    return (Loader<ArrayList<Review>>) new AsyncTaskLoader<ArrayList<Review>>(DetailActivity.this) {
+                    return (Loader<ArrayList<Review>>)
+                            new AsyncTaskLoader<ArrayList<Review>>(DetailActivity.this) {
 
                         Bundle mArgs = args;
                         ArrayList<Review> mReviewData;
@@ -188,7 +198,7 @@ public class DetailActivity extends AppCompatActivity
                             }
                             try {
                                 reviewRequestUrl = MovieApi.buildVideoReviewUrl(movieId, videoReviewSort);
-                                // This URL is fine. Check logCat from MovieApi                                }
+                                // This URL is fine. Check logCat from MovieApi
                                 String jsonResponse = NetworkUtils.httpConnect(reviewRequestUrl);
                                 Log.i(TAG, JsonUtils.parseVideoJson(jsonResponse).toString());
                                 // All good
@@ -216,8 +226,56 @@ public class DetailActivity extends AppCompatActivity
                 }
             };
 
+    private LoaderManager.LoaderCallbacks IsMovieFavouriteCursorLoader =
+            new LoaderManager.LoaderCallbacks<Cursor>() {
+                @Override
+                public Loader<Cursor> onCreateLoader(int loaderId, Bundle args) {
+                    switch (loaderId) {
+                        case FAVOURITE_QUERY_LOADER:
+                            String[] projection = {
+                                    FavouritesEntry.COLUMN_MOVIE_ID
+                            };
+                            String selection = FavouritesEntry.COLUMN_MOVIE_ID + " = ? ";
+                            String[] selectionArgs = {String.valueOf(currentMovie.getId())};
+
+                            return new CursorLoader(DetailActivity.this,
+                                    FavouritesEntry.CONTENT_URI,
+                                    projection,
+                                    selection,
+                                    selectionArgs,
+                                    null);
+                        default:
+                            throw new RuntimeException("Loader not implemented: " + loaderId);
+                    }
+                }
+
+                @Override
+                public void onLoadFinished(Loader loader, Cursor cursorData) {
+                    // TODO Simplify if statement
+                    try {
+                        if (cursorData.getCount() < 1) {
+                            mIsFavourite = false;
+                            // Set FAB colour for non Favourite (heart border)
+                            fab.setImageResource(R.drawable.ic_details_favourite_border);
+                        } else {
+                            mIsFavourite = true;
+                            // Set FAB colour for Favourite (heart full)
+                            fab.setImageResource((R.drawable.ic_details_favourite_full));
+                        }
+                    }
+                    catch(Exception e) {
+                        Log.e(TAG, "favourite query returns no data");
+                    }
+                }
+
+                @Override
+                public void onLoaderReset(Loader loader) {
+                }
+            };
+
     private static final int VIDEO_QUERY_LOADER = 20;
     private static final int REVIEW_QUERY_LOADER = 30;
+    private static final int FAVOURITE_QUERY_LOADER = 40;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -235,7 +293,7 @@ public class DetailActivity extends AppCompatActivity
         mArrowMore = (ImageView) findViewById(R.id.arrow_right);
 
         // Details intent from Movies grid
-        Intent intentThatStartedThisActivity = getIntent();
+        final Intent intentThatStartedThisActivity = getIntent();
         if (intentThatStartedThisActivity != null) {
             if (intentThatStartedThisActivity.hasExtra("movie")) {
                 currentMovie = intentThatStartedThisActivity.getParcelableExtra("movie");
@@ -243,11 +301,13 @@ public class DetailActivity extends AppCompatActivity
                 Picasso posterPicasso = Picasso.with(DetailActivity.this);
                 posterPicasso.setIndicatorsEnabled(true);
                 posterPicasso.load(Movie.buildFullPosterPath(currentMovie))
+                        .networkPolicy(NetworkPolicy.OFFLINE)
                         .into(mPosterView);
                 // Load backdrop images from Picasso
                 Picasso backPicasso = Picasso.with(DetailActivity.this);
                 backPicasso.setIndicatorsEnabled(true);
                 backPicasso.load(Movie.buildFullBackdropPath(currentMovie))
+                        //.networkPolicy(NetworkPolicy.OFFLINE)
                         .into(mBackdropView);
                 mTitleView.setText(currentMovie.getOriginalTitle());
                 mSynopsisView.setText(currentMovie.getSynopsis());
@@ -299,23 +359,28 @@ public class DetailActivity extends AppCompatActivity
         // Instantiate subclass of SQLiteOpenHelper
         mDbHelper = new FavouritesDbHelper(this);
 
-        // TODO Change to toast
-        // TODO check if already Fav (set colour)
+        // FAB button to add/remove current movie to Favourites database
         // TODO Add delete from Fav
-        // FAB to add movie to Favourites and show messsage (currently a snackbar)
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        //fab.setImageDrawable(R.drawable.ic);
+        // Check if movie is in Favourites and set the FAB colour accordingly
+        getSupportLoaderManager()
+                .restartLoader(FAVOURITE_QUERY_LOADER, null, IsMovieFavouriteCursorLoader);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Add movie to favourite
-                addFavourite();
-                // Change colour
-                // Right now reloaded as non Fav
-                fab.setImageResource(R.drawable.ic_details_favorite_full);
-//                // Display message to user
-//                Snackbar.make(v, "Added to Favourites!",
-//                        Snackbar.LENGTH_LONG).show();
+                if (mIsFavourite) {
+                    //Click will remove movie from Favourites
+                    // deleteFav()
+                    // Click will set FAB colour to border heart
+                    fab.setImageResource(R.drawable.ic_details_favourite_border);
+
+                } else {
+                    // Click will add movie to Favourites
+                    addFavourite();
+                    // Click will set FAB colour to full heart
+                    fab.setImageResource(R.drawable.ic_details_favourite_full);
+
+                }
             }
         });
     }
@@ -340,15 +405,15 @@ public class DetailActivity extends AppCompatActivity
         }
     }
 
-    // Add movie to Favourites
+    /**
+     * Add the current movie to the Favourites database, confirming insertion with a toast
+     */
     private void addFavourite() {
-        // Get the database in write mode
-        //SQLiteDatabase db = mDbHelper.getWritableDatabase();
         // Create a ContentValues object with column names as the keys and movie data as the values
         ContentValues values = new ContentValues();
         values.put(FavouritesEntry.COLUMN_MOVIE_ID, currentMovie.getId());
-        values.put(FavouritesEntry.COLUMN_MOVIE_POSTER, Movie.buildFullPosterPath(currentMovie).toString());
-        values.put(FavouritesEntry.COLUMN_MOVIE_BACKDROP, Movie.buildFullBackdropPath(currentMovie).toString());
+        values.put(FavouritesEntry.COLUMN_MOVIE_POSTER, currentMovie.getImagePath());
+        values.put(FavouritesEntry.COLUMN_MOVIE_BACKDROP, currentMovie.getBackdropPath());
         values.put(FavouritesEntry.COLUMN_MOVIE_TITLE, currentMovie.getOriginalTitle());
         values.put(FavouritesEntry.COLUMN_MOVIE_SYNOPSIS, currentMovie.getSynopsis());
         values.put(FavouritesEntry.COLUMN_MOVIE_RELEASE_DATE, currentMovie.getReleaseDate());
@@ -357,7 +422,8 @@ public class DetailActivity extends AppCompatActivity
         Uri uri = getContentResolver().insert(FavouritesEntry.CONTENT_URI, values);
         // Add a toast to confirm insertion
         if(uri != null) {
-            Toast.makeText(getBaseContext(), uri.toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(DetailActivity.this,currentMovie.getOriginalTitle() + " added to Favourites", Toast.LENGTH_LONG).show();
+
         }
     }
 

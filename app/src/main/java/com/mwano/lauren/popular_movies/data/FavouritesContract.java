@@ -36,9 +36,6 @@ public class FavouritesContract {
         /**
          * The MIME type of the content_uri for a list of favourites
          */
-       // public static final String
-
-
         public static final String TABLE_NAME = "favourites";
         public static final String COLUMN_MOVIE_ID = "movieId";
         public static final String COLUMN_MOVIE_POSTER = "moviePoster";

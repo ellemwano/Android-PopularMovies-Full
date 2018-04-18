@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements
     private FavouriteAdapter mFavouriteAdapter;
     private int displaySelected;
 
-    public static final int FAVOURITES_LOADER = 40;
+    public static final int FAVOURITES_LOADER = 50;
 
     //
     private LoaderManager.LoaderCallbacks FavouritesCursorLoader =
@@ -66,12 +66,12 @@ public class MainActivity extends AppCompatActivity implements
                             // Define a projection that specifies the columns from the table
                             String[] projection = {
                                     FavouritesContract.FavouritesEntry.COLUMN_MOVIE_ID,
-                                    FavouritesContract.FavouritesEntry.COLUMN_MOVIE_TITLE,
-                                    FavouritesContract.FavouritesEntry.COLUMN_RATING,
                                     FavouritesContract.FavouritesEntry.COLUMN_MOVIE_POSTER,
                                     FavouritesContract.FavouritesEntry.COLUMN_MOVIE_BACKDROP,
+                                    FavouritesContract.FavouritesEntry.COLUMN_MOVIE_TITLE,
+                                    FavouritesContract.FavouritesEntry.COLUMN_MOVIE_SYNOPSIS,
                                     FavouritesContract.FavouritesEntry.COLUMN_MOVIE_RELEASE_DATE,
-                                    FavouritesContract.FavouritesEntry.COLUMN_MOVIE_SYNOPSIS
+                                    FavouritesContract.FavouritesEntry.COLUMN_RATING
                             };
                             return new CursorLoader(MainActivity.this,
                                     FavouritesContract.FavouritesEntry.CONTENT_URI,
@@ -182,11 +182,11 @@ public class MainActivity extends AppCompatActivity implements
 
     // Open DetailActivity intent, using parcelable
     @Override
-    public void onClick(Movie currentMovie) {
-        Context context = this;
+    public void onClick(Movie clickedMovie) {
+        mContext = this;
         Class destinationClass = DetailActivity.class;
-        Intent intentToStartDetailActivity = new Intent(context, destinationClass);
-        intentToStartDetailActivity.putExtra("movie", currentMovie);
+        Intent intentToStartDetailActivity = new Intent(this, destinationClass);
+        intentToStartDetailActivity.putExtra("movie", clickedMovie);
         startActivity(intentToStartDetailActivity);
     }
 
@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        Context context = MainActivity.this;
+        mContext = MainActivity.this;
         displaySelected = item.getItemId();
         switch (displaySelected) {
             case R.id.nav_popular:
@@ -223,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements
         sortModeBundle.putString(SORT_QUERY, sortMode);
         getSupportLoaderManager().restartLoader(MOVIE_QUERY_LOADER, sortModeBundle, MainActivity.this);
         // Create new Adapter and set to RecyclerView in layout
-        mMovieAdapter = new MovieAdapter(this, movies, this);
+        //mMovieAdapter = new MovieAdapter(this, movies, this);
         mRecyclerView.setAdapter(mMovieAdapter);
     }
 
