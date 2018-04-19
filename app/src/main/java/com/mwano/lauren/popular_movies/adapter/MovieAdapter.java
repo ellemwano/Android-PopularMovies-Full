@@ -55,8 +55,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         mContext = movieViewHolder.mMovieImageView.getContext();
         Movie mCurrentMovie = mMovies.get(position);
         Picasso mPicasso = Picasso.with(mContext);
-        //Debug indicators
-        mPicasso.setIndicatorsEnabled(true);
         // Load movie posters
         mPicasso.load(Movie.buildFullPosterPath(mCurrentMovie))
                 .placeholder(R.drawable.poster_placeholder)

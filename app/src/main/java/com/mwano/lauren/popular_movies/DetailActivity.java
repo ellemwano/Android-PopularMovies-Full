@@ -298,7 +298,6 @@ public class DetailActivity extends AppCompatActivity
                 currentMovie = intentThatStartedThisActivity.getParcelableExtra("movie");
                 // Load movie posters from Picasso
                 Picasso posterPicasso = Picasso.with(DetailActivity.this);
-                posterPicasso.setIndicatorsEnabled(true);
                 posterPicasso.load(Movie.buildFullPosterPath(currentMovie))
                         //.networkPolicy(NetworkPolicy.OFFLINE)
                         .placeholder(R.drawable.poster_placeholder)
@@ -306,7 +305,6 @@ public class DetailActivity extends AppCompatActivity
                         .into(mPosterView);
                 // Load backdrop images from Picasso
                 Picasso backPicasso = Picasso.with(DetailActivity.this);
-                backPicasso.setIndicatorsEnabled(true);
                 backPicasso.load(Movie.buildFullBackdropPath(currentMovie))
                         //.networkPolicy(NetworkPolicy.OFFLINE)
                         .placeholder(R.drawable.backdrop_placeholder)
@@ -363,7 +361,6 @@ public class DetailActivity extends AppCompatActivity
         mDbHelper = new FavouritesDbHelper(this);
 
         // FAB button to add/remove current movie to Favourites database
-        // TODO Add delete from Fav
         fab = (FloatingActionButton) findViewById(R.id.fab);
         // Check if movie is in Favourites and set the FAB colour accordingly
         getSupportLoaderManager()

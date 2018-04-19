@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements
     private int displaySelected;
 
     public static final int FAVOURITES_LOADER = 50;
+    public static final String STATE_DISPLAY_KEY = "display selected";
 
     //
     private LoaderManager.LoaderCallbacks FavouritesCursorLoader =
@@ -148,17 +149,19 @@ public class MainActivity extends AppCompatActivity implements
         Loader<ArrayList<Movie>> moviePosterLoader = loaderManager.getLoader(MOVIE_QUERY_LOADER);
 
 
-//        // Persistence
-//        if (savedInstanceState != null) {
-//            displaySelected = savedInstanceState.getInt("selected display");
-//        } else {
+        // Persistence
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(STATE_DISPLAY_KEY)) {
+                displaySelected = savedInstanceState.getInt(STATE_DISPLAY_KEY);
+            }
+        } else {
+            displaySelected = R.id.nav_popular;
             if (moviePosterLoader == null) {
                 getSupportLoaderManager().initLoader(MOVIE_QUERY_LOADER, popularBundle, MainActivity.this);
             } else {
                 getSupportLoaderManager().restartLoader(MOVIE_QUERY_LOADER, popularBundle, MainActivity.this);
             }
-//        }
-
+        }
     }
 
     // Create new MoviePosterLoader
@@ -220,16 +223,6 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    private void loadMovieData(String sortMode) {
-        showMovieDataView();
-        Bundle sortModeBundle = new Bundle();
-        sortModeBundle.putString(SORT_QUERY, sortMode);
-        getSupportLoaderManager().restartLoader(MOVIE_QUERY_LOADER, sortModeBundle, MainActivity.this);
-        // Create new Adapter and set to RecyclerView in layout
-        //mMovieAdapter = new MovieAdapter(this, movies, this);
-        mRecyclerView.setAdapter(mMovieAdapter);
-    }
-
     private void displayPopularMovies() {
         loadMovieData(POPULAR);
         setTitle(R.string.popular_movies);
@@ -242,9 +235,18 @@ public class MainActivity extends AppCompatActivity implements
 
     private void displayFavouriteMovies() {
         showMovieDataView();
-        getSupportLoaderManager().initLoader(FAVOURITES_LOADER, null, FavouritesCursorLoader);
+        getSupportLoaderManager().restartLoader(FAVOURITES_LOADER, null, FavouritesCursorLoader);
         mRecyclerView.setAdapter(mFavouriteAdapter);
-        setTitle("My Favourite movies");
+        setTitle("My favourite movies");
+    }
+
+    private void loadMovieData(String sortMode) {
+        showMovieDataView();
+        Bundle sortModeBundle = new Bundle();
+        sortModeBundle.putString(SORT_QUERY, sortMode);
+        getSupportLoaderManager().restartLoader(MOVIE_QUERY_LOADER, sortModeBundle, MainActivity.this);
+        // Set adapter to RecyclerView in layout
+        mRecyclerView.setAdapter(mMovieAdapter);
     }
 
     private void showMovieDataView() {
@@ -257,12 +259,11 @@ public class MainActivity extends AppCompatActivity implements
         mConnectionErrorMessageDisplay.setVisibility(View.VISIBLE);
     }
 
-//        // TODO State persistence
-//    @Override
-//    protected void onSaveInstanceState(Bundle selectedState) {
-//        selectedState.putInt("selected display", displaySelected);
-//        super.onSaveInstanceState(selectedState);
-//
-//    }
+        // TODO State persistence
+    @Override
+    protected void onSaveInstanceState(Bundle selectedState) {
+        super.onSaveInstanceState(selectedState);
+        selectedState.putInt(STATE_DISPLAY_KEY, displaySelected);
+    }
 }
 

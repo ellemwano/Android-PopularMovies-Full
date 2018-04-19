@@ -46,8 +46,6 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
         mCursor.moveToPosition(position);
         // TODO add placeholder
         Picasso mPicasso = Picasso.with(mContext);
-        //Debug indicators
-        mPicasso.setIndicatorsEnabled(true);
         // Load movie posters
         mPicasso.load(Movie.BASE_POSTER_PATH
                 + mCursor.getString(mCursor.getColumnIndex(FavouritesContract.FavouritesEntry.COLUMN_MOVIE_POSTER)))
