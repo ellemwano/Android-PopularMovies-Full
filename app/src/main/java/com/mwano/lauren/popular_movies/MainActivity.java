@@ -53,9 +53,11 @@ public class MainActivity extends AppCompatActivity implements
     private Context mContext;
     private FavouriteAdapter mFavouriteAdapter;
     private int displaySelected;
+    private String loadedDisplay;
 
     public static final int FAVOURITES_LOADER = 50;
     public static final String STATE_DISPLAY_KEY = "display selected";
+    public static final String DISPLAY_LOADED_KEY = "display loaded";
 
     //
     private LoaderManager.LoaderCallbacks FavouritesCursorLoader =
@@ -153,15 +155,17 @@ public class MainActivity extends AppCompatActivity implements
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(STATE_DISPLAY_KEY)) {
                 displaySelected = savedInstanceState.getInt(STATE_DISPLAY_KEY);
+                loadedDisplay = savedInstanceState.getString(DISPLAY_LOADED_KEY);
             }
         } else {
             displaySelected = R.id.nav_popular;
-            if (moviePosterLoader == null) {
-                getSupportLoaderManager().initLoader(MOVIE_QUERY_LOADER, popularBundle, MainActivity.this);
-            } else {
-                getSupportLoaderManager().restartLoader(MOVIE_QUERY_LOADER, popularBundle, MainActivity.this);
-            }
+//            if (moviePosterLoader == null) {
+//                getSupportLoaderManager().initLoader(MOVIE_QUERY_LOADER, popularBundle, MainActivity.this);
+//            } else {
+//                getSupportLoaderManager().restartLoader(MOVIE_QUERY_LOADER, popularBundle, MainActivity.this);
+//            }
         }
+        loadMovieData(loadedDisplay);
     }
 
     // Create new MoviePosterLoader
@@ -206,47 +210,61 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.nav_popular:
                 // Sort movies by Popular Movies
                 drawer.closeDrawer(GravityCompat.START);
-                displayPopularMovies();
+                loadedDisplay = POPULAR;
+                loadMovieData(loadedDisplay);
                 return true;
             case R.id.nav_top_rated:
                 // Sort movies by Top Rated Movies
                 drawer.closeDrawer(GravityCompat.START);
-                displayTopRatedMovies();
+                loadedDisplay = TOP_RATED;
+                loadMovieData(loadedDisplay);
                 return true;
             case R.id.nav_favourite:
                 // Display user's Favourite Movies
                 drawer.closeDrawer(GravityCompat.START);
-                displayFavouriteMovies();
+                loadedDisplay = "favourite";
+                loadMovieData(loadedDisplay);
                 return true;
             default:
                 return false;
         }
     }
 
-    private void displayPopularMovies() {
-        loadMovieData(POPULAR);
-        setTitle(R.string.popular_movies);
-    }
+//    private void displayPopularMovies() {
+//        loadMovieData(POPULAR);
+//        setTitle(R.string.popular_movies);
+//    }
+//
+//    private void displayTopRatedMovies() {
+//        loadMovieData(TOP_RATED);
+//        setTitle(R.string.top_rated_movies);
+//    }
 
-    private void displayTopRatedMovies() {
-        loadMovieData(TOP_RATED);
-        setTitle(R.string.top_rated_movies);
-    }
-
-    private void displayFavouriteMovies() {
-        showMovieDataView();
-        getSupportLoaderManager().restartLoader(FAVOURITES_LOADER, null, FavouritesCursorLoader);
-        mRecyclerView.setAdapter(mFavouriteAdapter);
-        setTitle("My favourite movies");
-    }
+//    private void displayFavouriteMovies() {
+//        showMovieDataView();
+//        getSupportLoaderManager().restartLoader(FAVOURITES_LOADER, null, FavouritesCursorLoader);
+//        mRecyclerView.setAdapter(mFavouriteAdapter);
+//        setTitle("My favourite movies");
+//    }
 
     private void loadMovieData(String sortMode) {
         showMovieDataView();
-        Bundle sortModeBundle = new Bundle();
-        sortModeBundle.putString(SORT_QUERY, sortMode);
-        getSupportLoaderManager().restartLoader(MOVIE_QUERY_LOADER, sortModeBundle, MainActivity.this);
-        // Set adapter to RecyclerView in layout
-        mRecyclerView.setAdapter(mMovieAdapter);
+        if (sortMode!= null && (sortMode.equals(POPULAR) || sortMode.equals(TOP_RATED))) {
+            Bundle sortModeBundle = new Bundle();
+            sortModeBundle.putString(SORT_QUERY, sortMode);
+            getSupportLoaderManager().restartLoader(MOVIE_QUERY_LOADER, sortModeBundle, MainActivity.this);
+            // Set adapter to RecyclerView in layout
+            mRecyclerView.setAdapter(mMovieAdapter);
+            if (sortMode.equals(POPULAR)) {
+                setTitle(R.string.popular_movies);
+            } else {
+                setTitle(R.string.top_rated_movies);
+            }
+        } else {
+            getSupportLoaderManager().restartLoader(FAVOURITES_LOADER, null, FavouritesCursorLoader);
+            mRecyclerView.setAdapter(mFavouriteAdapter);
+            setTitle("My favourite movies");
+        }
     }
 
     private void showMovieDataView() {
@@ -264,6 +282,7 @@ public class MainActivity extends AppCompatActivity implements
     protected void onSaveInstanceState(Bundle selectedState) {
         super.onSaveInstanceState(selectedState);
         selectedState.putInt(STATE_DISPLAY_KEY, displaySelected);
+        selectedState.putString(DISPLAY_LOADED_KEY, loadedDisplay);
     }
 }
 
