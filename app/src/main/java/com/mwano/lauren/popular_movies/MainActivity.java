@@ -146,16 +146,19 @@ public class MainActivity extends AppCompatActivity implements
         // Initialise Movie loader
         LoaderManager loaderManager = getSupportLoaderManager();
         Loader<ArrayList<Movie>> moviePosterLoader = loaderManager.getLoader(MOVIE_QUERY_LOADER);
-        if (moviePosterLoader == null) {
-            getSupportLoaderManager().initLoader(MOVIE_QUERY_LOADER, popularBundle, MainActivity.this);
-        } else {
-            getSupportLoaderManager().restartLoader(MOVIE_QUERY_LOADER, popularBundle, MainActivity.this);
-        }
-//        if (savedInstanceState == null) {
-//            setPopularMoviesToAdapter();
+
+
+//        // Persistence
+//        if (savedInstanceState != null) {
+//            displaySelected = savedInstanceState.getInt("selected display");
 //        } else {
-//
+            if (moviePosterLoader == null) {
+                getSupportLoaderManager().initLoader(MOVIE_QUERY_LOADER, popularBundle, MainActivity.this);
+            } else {
+                getSupportLoaderManager().restartLoader(MOVIE_QUERY_LOADER, popularBundle, MainActivity.this);
+            }
 //        }
+
     }
 
     // Create new MoviePosterLoader
@@ -257,8 +260,9 @@ public class MainActivity extends AppCompatActivity implements
 //        // TODO State persistence
 //    @Override
 //    protected void onSaveInstanceState(Bundle selectedState) {
-//        super.onSaveInstanceState(selectedState);
 //        selectedState.putInt("selected display", displaySelected);
+//        super.onSaveInstanceState(selectedState);
+//
 //    }
 }
 

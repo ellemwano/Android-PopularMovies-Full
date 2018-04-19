@@ -17,7 +17,10 @@
     <string name="toast_favourites">Coming soon. Will show your Favourite Movies</string>
 
     <!-- Error messages -->
-    <string name="connection_error_message">Something went wrong. Please make sure you entered your API key and/or check your internet connection</string>
+    <string name="connection_error_message">Something went wrong.\nPlease
+        make sure you entered your API key and/or check your internet connection.\n\nIn
+        the meantime, you can check your Favourite movies :-)
+    </string>
 
     <!-- Content description -->
     <string name="descrip_backdrop">The movie\'s backdrop image</string>

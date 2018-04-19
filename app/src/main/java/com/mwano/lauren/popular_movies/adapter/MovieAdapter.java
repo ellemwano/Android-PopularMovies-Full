@@ -54,12 +54,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     public void onBindViewHolder(MovieViewHolder movieViewHolder, int position) {
         mContext = movieViewHolder.mMovieImageView.getContext();
         Movie mCurrentMovie = mMovies.get(position);
-        // TODO add placeholder
         Picasso mPicasso = Picasso.with(mContext);
         //Debug indicators
         mPicasso.setIndicatorsEnabled(true);
         // Load movie posters
         mPicasso.load(Movie.buildFullPosterPath(mCurrentMovie))
+                .placeholder(R.drawable.poster_placeholder)
+                .error(R.drawable.poster_placeholder)
                 .into(movieViewHolder.mMovieImageView);
     }
 

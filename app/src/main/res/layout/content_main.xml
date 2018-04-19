@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:background="@color/colorPrimary">
 
 
     <android.support.v7.widget.RecyclerView
@@ -17,9 +18,15 @@
         android:layout_height="wrap_content"
         android:padding="32dp"
         android:text="@string/connection_error_message"
-        android:textSize="22sp"
+        android:textSize="20sp"
         android:textStyle="bold"
-        android:visibility="invisible" />
+        android:layout_gravity="top"
+        android:gravity="left|bottom"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/white"
+        android:visibility="invisible"
+        android:drawablePadding="32dp"
+        android:drawableBottom="@drawable/powered_by_tmbd_blue"/>
 
 </FrameLayout>
 

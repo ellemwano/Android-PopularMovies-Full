@@ -300,13 +300,17 @@ public class DetailActivity extends AppCompatActivity
                 Picasso posterPicasso = Picasso.with(DetailActivity.this);
                 posterPicasso.setIndicatorsEnabled(true);
                 posterPicasso.load(Movie.buildFullPosterPath(currentMovie))
-                        .networkPolicy(NetworkPolicy.OFFLINE)
+                        //.networkPolicy(NetworkPolicy.OFFLINE)
+                        .placeholder(R.drawable.poster_placeholder)
+                        .error(R.drawable.poster_placeholder)
                         .into(mPosterView);
                 // Load backdrop images from Picasso
                 Picasso backPicasso = Picasso.with(DetailActivity.this);
                 backPicasso.setIndicatorsEnabled(true);
                 backPicasso.load(Movie.buildFullBackdropPath(currentMovie))
                         //.networkPolicy(NetworkPolicy.OFFLINE)
+                        .placeholder(R.drawable.backdrop_placeholder)
+                        .error(R.drawable.backdrop_placeholder)
                         .into(mBackdropView);
                 mTitleView.setText(currentMovie.getOriginalTitle());
                 mSynopsisView.setText(currentMovie.getSynopsis());

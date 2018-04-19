@@ -52,6 +52,8 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
         mPicasso.load(Movie.BASE_POSTER_PATH
                 + mCursor.getString(mCursor.getColumnIndex(FavouritesContract.FavouritesEntry.COLUMN_MOVIE_POSTER)))
                 //.networkPolicy(NetworkPolicy.OFFLINE)
+                .placeholder(R.drawable.poster_placeholder)
+                .error(R.drawable.poster_placeholder)
                 .into(favouriteViewHolder.mMovieImageView);
     }
 
