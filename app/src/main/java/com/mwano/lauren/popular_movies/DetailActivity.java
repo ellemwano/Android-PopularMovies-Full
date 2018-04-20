@@ -2,15 +2,12 @@ package com.mwano.lauren.popular_movies;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.AsyncTaskLoader;
@@ -25,6 +22,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +36,6 @@ import com.mwano.lauren.popular_movies.model.Video;
 import com.mwano.lauren.popular_movies.utils.JsonUtils;
 import com.mwano.lauren.popular_movies.utils.MovieApi;
 import com.mwano.lauren.popular_movies.utils.NetworkUtils;
-import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -78,8 +75,11 @@ public class DetailActivity extends AppCompatActivity
     private FavouritesDbHelper mDbHelper;
     private boolean mIsFavourite;
     private Uri mCurrentMovieUri;
+    private ScrollView mScrollView;
+
     public static final String VIDEO_REVIEW_SORT = "video_review_sort";
     public static final String MOVIE_ID = "movie_id";
+    private static final String LAYOUT_DETAIL_STATE_KEY = "scrolling state detail";
     private static final String TAG = DetailActivity.class.getSimpleName();
 
     // Implementing multiple loaders in one activity.
@@ -429,7 +429,6 @@ public class DetailActivity extends AppCompatActivity
     }
 
     private void removeFavourite() {
-        // TODO check
         mCurrentMovieUri = FavouritesEntry.CONTENT_URI;
         String selection = FavouritesEntry.COLUMN_MOVIE_ID + " = ? ";
         String[] selectionArgs = {String.valueOf(currentMovie.getId())};
@@ -451,4 +450,27 @@ public class DetailActivity extends AppCompatActivity
         }
         return super.onOptionsItemSelected(item);
     }
+
+//    @Override
+//    public void onSaveInstanceState(Bundle detailState) {
+//        super.onSaveInstanceState(detailState);
+//        if (mScrollView != null) {
+//            detailState.putIntArray(LAYOUT_DETAIL_STATE_KEY,
+//                    new int[]{mScrollView.getScrollX(), mScrollView.getScrollY()});
+//        }
+//    }
+//
+//    @Override
+//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+//        super.onRestoreInstanceState(savedInstanceState);
+//        final int[] position = savedInstanceState.getIntArray(LAYOUT_DETAIL_STATE_KEY);
+//        if(position != null) {
+//            mScrollView.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    mScrollView.scrollTo(position[0], position[1]);
+//                }
+//            });
+//        }
+//    }
 }

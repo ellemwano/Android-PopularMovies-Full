@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements
     public static final int FAVOURITES_LOADER = 50;
     private static final String STATE_DISPLAY_KEY = "display selected";
     private static final String DISPLAY_LOADED_KEY = "display loaded";
-    private static final String LAYOUT_MANAGER_STATE_KEY = "LayoutManager state";
+    private static final String LAYOUT_MANAGER_STATE_KEY = "LayoutManager scrolling state";
     private Parcelable mSavedRecyclerlayoutState;
 
     //
@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements
                 @Override
                 public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
                     mFavouriteAdapter.swapCursor(data);
+                    // Restore scrolling position upon navigation and rotation
                     mRecyclerView.getLayoutManager().onRestoreInstanceState(mSavedRecyclerlayoutState);
                 }
 
@@ -148,16 +149,13 @@ public class MainActivity extends AppCompatActivity implements
         mFavouriteAdapter = new FavouriteAdapter(this, this);
         mRecyclerView.setAdapter(mMovieAdapter);
 
-        // TODO TO RETHINK
         // Movie loader bundle
         Bundle popularBundle = new Bundle();
         popularBundle.putString(SORT_QUERY, POPULAR);
-        // Initialise Movie loader
         LoaderManager loaderManager = getSupportLoaderManager();
         Loader<ArrayList<Movie>> moviePosterLoader = loaderManager.getLoader(MOVIE_QUERY_LOADER);
 
-
-        // Persistence
+        // Restore user's display choice from menu upon app navigation and rotation
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(STATE_DISPLAY_KEY) && savedInstanceState.containsKey(DISPLAY_LOADED_KEY)) {
                 displaySelected = savedInstanceState.getInt(STATE_DISPLAY_KEY);
@@ -166,11 +164,6 @@ public class MainActivity extends AppCompatActivity implements
         } else {
             displaySelected = R.id.nav_popular;
             loadedDisplay = POPULAR;
-//            if (moviePosterLoader == null) {
-//                getSupportLoaderManager().initLoader(MOVIE_QUERY_LOADER, popularBundle, MainActivity.this);
-//            } else {
-//                getSupportLoaderManager().restartLoader(MOVIE_QUERY_LOADER, popularBundle, MainActivity.this);
-//            }
         }
         loadMovieData(loadedDisplay);
     }
@@ -185,8 +178,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onLoadFinished(Loader<ArrayList<Movie>> loader, ArrayList<Movie> movies) {
         if (movies != null) {
-//            mGridLayoutManager = new GridLayoutManager(this, mColumnsNumber);
-//            mRecyclerView.setLayoutManager(mGridLayoutManager);
+            // Restore scrolling position upon navigation and rotation
             mRecyclerView.getLayoutManager().onRestoreInstanceState(mSavedRecyclerlayoutState);
             mMovieAdapter.setMovieData(movies);
         } else {
@@ -240,23 +232,6 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-//    private void displayPopularMovies() {
-//        loadMovieData(POPULAR);
-//        setTitle(R.string.popular_movies);
-//    }
-//
-//    private void displayTopRatedMovies() {
-//        loadMovieData(TOP_RATED);
-//        setTitle(R.string.top_rated_movies);
-//    }
-
-//    private void displayFavouriteMovies() {
-//        showMovieDataView();
-//        getSupportLoaderManager().restartLoader(FAVOURITES_LOADER, null, FavouritesCursorLoader);
-//        mRecyclerView.setAdapter(mFavouriteAdapter);
-//        setTitle("My favourite movies");
-//    }
-
     private void loadMovieData(String sortMode) {
         showMovieDataView();
         if (sortMode!= null && (sortMode.equals(POPULAR) || sortMode.equals(TOP_RATED))) {
@@ -272,7 +247,6 @@ public class MainActivity extends AppCompatActivity implements
             }
         } else {
             getSupportLoaderManager().restartLoader(FAVOURITES_LOADER, null, FavouritesCursorLoader);
-            //mRecyclerView.getLayoutManager().onRestoreInstanceState(mSavedRecyclerlayoutState);
             mRecyclerView.setAdapter(mFavouriteAdapter);
             setTitle("My favourite movies");
         }
@@ -288,18 +262,24 @@ public class MainActivity extends AppCompatActivity implements
         mConnectionErrorMessageDisplay.setVisibility(View.VISIBLE);
     }
 
-        // TODO State persistence
-    @Override
     protected void onSaveInstanceState(Bundle selectedState) {
         super.onSaveInstanceState(selectedState);
+        // Restore user's display choice from menu upon app navigation and rotation
         selectedState.putInt(STATE_DISPLAY_KEY, displaySelected);
         selectedState.putString(DISPLAY_LOADED_KEY, loadedDisplay);
+        // Save scrolling position
+        /**
+         * Source code: https://stackoverflow.com/questions/27816217/
+         * how-to-save-recyclerviews-scroll-position-using-recyclerview-state
+         * (Answer Patrick kennedy and Gokhan Baris Aker)
+         */
         selectedState.putParcelable(LAYOUT_MANAGER_STATE_KEY, mGridLayoutManager.onSaveInstanceState());
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+        // Restore scrolling position upon navigation and rotation
         if (savedInstanceState != null) {
             mSavedRecyclerlayoutState = savedInstanceState.getParcelable(LAYOUT_MANAGER_STATE_KEY);
             mRecyclerView.getLayoutManager().onRestoreInstanceState(mSavedRecyclerlayoutState);
