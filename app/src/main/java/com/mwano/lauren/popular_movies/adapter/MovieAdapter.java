@@ -13,8 +13,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-/**
- * Created by ElleMwa on 25/02/2018.
+/*
+  Created by ElleMwa on 25/02/2018.
  */
 
 

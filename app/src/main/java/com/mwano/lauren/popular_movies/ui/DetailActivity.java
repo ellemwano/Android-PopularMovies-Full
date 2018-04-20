@@ -1,4 +1,4 @@
-package com.mwano.lauren.popular_movies;
+package com.mwano.lauren.popular_movies.ui;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
@@ -22,10 +22,10 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mwano.lauren.popular_movies.R;
 import com.mwano.lauren.popular_movies.adapter.ReviewAdapter;
 import com.mwano.lauren.popular_movies.adapter.VideoAdapter;
 import com.mwano.lauren.popular_movies.data.FavouritesContract.FavouritesEntry;
@@ -75,15 +75,15 @@ public class DetailActivity extends AppCompatActivity
     private FavouritesDbHelper mDbHelper;
     private boolean mIsFavourite;
     private Uri mCurrentMovieUri;
-    private ScrollView mScrollView;
 
     public static final String VIDEO_REVIEW_SORT = "video_review_sort";
     public static final String MOVIE_ID = "movie_id";
-    private static final String LAYOUT_DETAIL_STATE_KEY = "scrolling state detail";
     private static final String TAG = DetailActivity.class.getSimpleName();
 
-    // Implementing multiple loaders in one activity.
-    // Source code: https://stackoverflow.com/questions/15643907/multiple-loaders-in-same-activity
+    /**
+     * Implementing multiple loaders in one activity.
+     * Source code: https://stackoverflow.com/questions/15643907/multiple-loaders-in-same-activity
+     */
     private LoaderManager.LoaderCallbacks VideoLoaderListener =
             new LoaderManager.LoaderCallbacks<ArrayList<Video>>() {
                 @SuppressLint("StaticFieldLeak")
@@ -112,22 +112,15 @@ public class DetailActivity extends AppCompatActivity
                                 return null;
                             }
                             String movieId = mArgs.getString(MOVIE_ID);
-                            Log.i(TAG, "ID value is: " + movieId);
-                            // ID is correct
                             String videoReviewSort = mArgs.getString(VIDEO_REVIEW_SORT);
-                            Log.i(TAG, "Sort value is: " + videoReviewSort);
                             URL videoRequestUrl;
-
                             if ((movieId != null && movieId.equals(""))
                                     || (videoReviewSort != null && videoReviewSort.equals(""))) {
                                 return null;
                             }
                             try {
                                 videoRequestUrl = MovieApi.buildVideoReviewUrl(movieId, videoReviewSort);
-                                // This URL is fine. Check logCat from MovieApi                                }
                                 String jsonResponse = NetworkUtils.httpConnect(videoRequestUrl);
-                                Log.i(TAG, JsonUtils.parseVideoJson(jsonResponse).toString());
-                                // All good
                                 return JsonUtils.parseVideoJson(jsonResponse);
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -152,7 +145,7 @@ public class DetailActivity extends AppCompatActivity
                         }
                     } else {
                         //showConnectionErrorMessage();
-                        Log.i(TAG, "Error displaying videos");
+                        Log.e(TAG, "Error displaying videos");
                     }
                 }
             };
@@ -185,22 +178,15 @@ public class DetailActivity extends AppCompatActivity
                                 return null;
                             }
                             String movieId = mArgs.getString(MOVIE_ID);
-                            Log.i(TAG, "ID value is: " + movieId);
-                            // ID is correct
                             String videoReviewSort = mArgs.getString(VIDEO_REVIEW_SORT);
-                            Log.i(TAG, "Sort value is: " + videoReviewSort);
                             URL reviewRequestUrl;
-
                             if ((movieId != null && movieId.equals(""))
                                     || (videoReviewSort != null && videoReviewSort.equals(""))) {
                                 return null;
                             }
                             try {
                                 reviewRequestUrl = MovieApi.buildVideoReviewUrl(movieId, videoReviewSort);
-                                // This URL is fine. Check logCat from MovieApi
                                 String jsonResponse = NetworkUtils.httpConnect(reviewRequestUrl);
-                                Log.i(TAG, JsonUtils.parseVideoJson(jsonResponse).toString());
-                                // All good
                                 return JsonUtils.parseReviewJson(jsonResponse);
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -220,7 +206,7 @@ public class DetailActivity extends AppCompatActivity
                         mReviewAdapter.setReviewData(reviews);
                     } else {
                         //showConnectionErrorMessage();
-                        Log.i(TAG, "Error displaying reviews");
+                        Log.e(TAG, "Error displaying reviews");
                     }
                 }
             };
@@ -299,14 +285,12 @@ public class DetailActivity extends AppCompatActivity
                 // Load movie posters from Picasso
                 Picasso posterPicasso = Picasso.with(DetailActivity.this);
                 posterPicasso.load(Movie.buildFullPosterPath(currentMovie))
-                        //.networkPolicy(NetworkPolicy.OFFLINE)
                         .placeholder(R.drawable.poster_placeholder)
                         .error(R.drawable.poster_placeholder)
                         .into(mPosterView);
                 // Load backdrop images from Picasso
                 Picasso backPicasso = Picasso.with(DetailActivity.this);
                 backPicasso.load(Movie.buildFullBackdropPath(currentMovie))
-                        //.networkPolicy(NetworkPolicy.OFFLINE)
                         .placeholder(R.drawable.backdrop_placeholder)
                         .error(R.drawable.backdrop_placeholder)
                         .into(mBackdropView);
@@ -326,9 +310,6 @@ public class DetailActivity extends AppCompatActivity
 
         // Get reference to VideoRecyclerView
         mVideoRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_videos);
-        // TODO set error view
-        // Get reference to error TextView
-        //mDownloadErrorMessageDisplay = (TextView) findViewById(R.id.);
         mVideoRecyclerView.setLayoutManager(new LinearLayoutManager
                 (DetailActivity.this, LinearLayoutManager.HORIZONTAL, false));
         mVideoRecyclerView.setHasFixedSize(true);
@@ -344,17 +325,17 @@ public class DetailActivity extends AppCompatActivity
         mReviewRecyclerView.setAdapter(mReviewAdapter);
 
         String movieId = String.valueOf(currentMovie.getId());
-        Log.i(TAG, "CurrentMovie ID is: " + movieId);
-        // ID is correct
         // VideoLoader bundle
         Bundle videoBundle = new Bundle();
         videoBundle.putString(MOVIE_ID, movieId);
         videoBundle.putString(VIDEO_REVIEW_SORT, VIDEO_END);
         // Initialise VideoLoader
         getSupportLoaderManager().initLoader(VIDEO_QUERY_LOADER, videoBundle, VideoLoaderListener);
+        // ReviewLoader bundle
         Bundle reviewBundle = new Bundle();
         reviewBundle.putString(MOVIE_ID, movieId);
         reviewBundle.putString(VIDEO_REVIEW_SORT, REVIEW_END);
+        // Initialise ReviewLoader
         getSupportLoaderManager().initLoader(REVIEW_QUERY_LOADER, reviewBundle, ReviewLoaderListener);
 
         // Instantiate subclass of SQLiteOpenHelper
@@ -378,7 +359,6 @@ public class DetailActivity extends AppCompatActivity
                     addFavourite();
                     // Click will set FAB colour to full heart
                     fab.setImageResource(R.drawable.ic_details_favourite_full);
-
                 }
             }
         });
@@ -393,15 +373,8 @@ public class DetailActivity extends AppCompatActivity
         }
     }
 
-    // TODO Implement expanding TextView
-    // Implicit intent to show full Review on webpage
     @Override
     public void onClickReview(Review currentReview) {
-        String currentReviewUrl = currentReview.getReviewUrl();
-        Intent intentOpenReview = new Intent(Intent.ACTION_VIEW, Uri.parse(currentReviewUrl));
-        if(intentOpenReview.resolveActivity(getPackageManager()) != null) {
-            startActivity(intentOpenReview);
-        }
     }
 
     /**
@@ -428,6 +401,9 @@ public class DetailActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Remove the current movie from the Favourites database, confirming removal with a toast
+     */
     private void removeFavourite() {
         mCurrentMovieUri = FavouritesEntry.CONTENT_URI;
         String selection = FavouritesEntry.COLUMN_MOVIE_ID + " = ? ";
@@ -450,27 +426,4 @@ public class DetailActivity extends AppCompatActivity
         }
         return super.onOptionsItemSelected(item);
     }
-
-//    @Override
-//    public void onSaveInstanceState(Bundle detailState) {
-//        super.onSaveInstanceState(detailState);
-//        if (mScrollView != null) {
-//            detailState.putIntArray(LAYOUT_DETAIL_STATE_KEY,
-//                    new int[]{mScrollView.getScrollX(), mScrollView.getScrollY()});
-//        }
-//    }
-//
-//    @Override
-//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-//        super.onRestoreInstanceState(savedInstanceState);
-//        final int[] position = savedInstanceState.getIntArray(LAYOUT_DETAIL_STATE_KEY);
-//        if(position != null) {
-//            mScrollView.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    mScrollView.scrollTo(position[0], position[1]);
-//                }
-//            });
-//        }
-//    }
 }

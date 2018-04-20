@@ -7,15 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.mwano.lauren.popular_movies.R;
 import com.mwano.lauren.popular_movies.data.FavouritesContract;
 import com.mwano.lauren.popular_movies.model.Movie;
-import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 
 
 public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.FavouriteViewHolder> {
@@ -29,7 +25,6 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
     public FavouriteAdapter(Context context, FavouriteAdapterOnClickHandler favouriteClickHandler) {
         mContext = context;
         mFavouriteClickHandler = favouriteClickHandler;
-
     }
 
     @Override
@@ -44,12 +39,10 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
     @Override
     public void onBindViewHolder(FavouriteAdapter.FavouriteViewHolder favouriteViewHolder, int position) {
         mCursor.moveToPosition(position);
-        // TODO add placeholder
         Picasso mPicasso = Picasso.with(mContext);
         // Load movie posters
         mPicasso.load(Movie.BASE_POSTER_PATH
                 + mCursor.getString(mCursor.getColumnIndex(FavouritesContract.FavouritesEntry.COLUMN_MOVIE_POSTER)))
-                //.networkPolicy(NetworkPolicy.OFFLINE)
                 .placeholder(R.drawable.poster_placeholder)
                 .error(R.drawable.poster_placeholder)
                 .into(favouriteViewHolder.mMovieImageView);
@@ -96,8 +89,11 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
             mFavouriteClickHandler.onClick(queryFavourite());
         }
 
-        // Create a new Movie object from the cursor query (that will be passed as parcelable
-        // in the DetailActivity intent)
+        /**
+         * Create a new Movie object from the cursor query (that will be passed as parcelable
+         * in the DetailActivity intent)
+         * @return The currentMovie object
+         */
         private Movie queryFavourite() {
             Movie currentFavouriteMovie = new Movie();
             currentFavouriteMovie.setId(mCursor.getInt(

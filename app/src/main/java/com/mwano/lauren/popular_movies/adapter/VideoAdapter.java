@@ -48,6 +48,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
     public void onBindViewHolder(VideoAdapter.VideoViewHolder videoViewHolder, int position) {
         mContext = videoViewHolder.mVideoImageView.getContext();
         Video mCurrentVideo = mVideos.get(position);
+        // Load video thumbnails
         Picasso.with(mContext).load(Video.buildVideoThumbnailPath(mCurrentVideo))
                 .placeholder(R.drawable.video_placeholder)
                 .error(R.drawable.video_placeholder)

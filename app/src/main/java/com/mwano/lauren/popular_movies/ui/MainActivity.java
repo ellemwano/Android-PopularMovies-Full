@@ -1,4 +1,4 @@
-package com.mwano.lauren.popular_movies;
+package com.mwano.lauren.popular_movies.ui;
 
 
 import android.content.Context;
@@ -22,8 +22,8 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.mwano.lauren.popular_movies.R;
 import com.mwano.lauren.popular_movies.adapter.FavouriteAdapter;
 import com.mwano.lauren.popular_movies.adapter.MovieAdapter;
 import com.mwano.lauren.popular_movies.data.FavouritesContract;
@@ -41,9 +41,6 @@ public class MainActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<ArrayList<Movie>>,
         NavigationView.OnNavigationItemSelectedListener {
 
-    public static final String POPULAR = "popular";
-    public static final String TOP_RATED = "top_rated";
-    private static final String TAG = MainActivity.class.getSimpleName();
     ArrayList<Movie> movies;
     private RecyclerView mRecyclerView;
     private MovieAdapter mMovieAdapter;
@@ -56,14 +53,17 @@ public class MainActivity extends AppCompatActivity implements
     private int displaySelected;
     private String loadedDisplay;
     private GridLayoutManager mGridLayoutManager;
+    private Parcelable mSavedRecyclerlayoutState;
 
-    public static final int FAVOURITES_LOADER = 50;
+    public static final String POPULAR = "popular";
+    public static final String TOP_RATED = "top_rated";
     private static final String STATE_DISPLAY_KEY = "display selected";
     private static final String DISPLAY_LOADED_KEY = "display loaded";
     private static final String LAYOUT_MANAGER_STATE_KEY = "LayoutManager scrolling state";
-    private Parcelable mSavedRecyclerlayoutState;
 
-    //
+    public static final int FAVOURITES_LOADER = 50;
+    private static final String TAG = MainActivity.class.getSimpleName();
+
     private LoaderManager.LoaderCallbacks FavouritesCursorLoader =
             new LoaderManager.LoaderCallbacks<Cursor>() {
                 @Override
@@ -110,9 +110,11 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         // Instantiate the navigation drawer
-        //(Source code, java and xml, Google's Android Developer Fundamental Course:
-        // https://google-developer-training.gitbooks.io
-        // /android-developer-fundamentals-course-concepts/content/en/Unit%202/42_c_menus.html
+        /*
+          Source code, java and xml, Google's Android Developer Fundamental Course:
+          https://google-developer-training.gitbooks.io
+          /android-developer-fundamentals-course-concepts/content/en/Unit%202/42_c_menus.html
+         */
         mDrawer = (DrawerLayout)
                 findViewById(R.id.drawer_layout);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -126,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements
             mDrawer.addDrawerListener(toggle);
         }
         toggle.syncState();
-
+        // Navigation view
         NavigationView navigationView = (NavigationView)
                 findViewById(R.id.nav_view);
         if (navigationView != null) {
@@ -139,8 +141,10 @@ public class MainActivity extends AppCompatActivity implements
         // Get reference to error TextView
         mConnectionErrorMessageDisplay = (TextView) findViewById(R.id.connection_error_message_tv);
         // Set GridLinearLayout to RecyclerView, 2 columns if vertical, 4 columns if horizontal
-        // (Source code, Udacity forum mentor Nisha Shinde:
-        // https://discussions.udacity.com/t/gridlayoutmanager-recyclerview/499251/4)
+        /*
+          Source code, Udacity forum mentor Nisha Shinde:
+          https://discussions.udacity.com/t/gridlayoutmanager-recyclerview/499251/4
+         */
         mColumnsNumber = (int) getResources().getInteger(R.integer.num_of_columns);
         mGridLayoutManager = new GridLayoutManager(this, mColumnsNumber);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
@@ -248,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements
         } else {
             getSupportLoaderManager().restartLoader(FAVOURITES_LOADER, null, FavouritesCursorLoader);
             mRecyclerView.setAdapter(mFavouriteAdapter);
-            setTitle("My favourite movies");
+            setTitle(R.string.favourite_movies);
         }
     }
 
@@ -268,10 +272,10 @@ public class MainActivity extends AppCompatActivity implements
         selectedState.putInt(STATE_DISPLAY_KEY, displaySelected);
         selectedState.putString(DISPLAY_LOADED_KEY, loadedDisplay);
         // Save scrolling position
-        /**
-         * Source code: https://stackoverflow.com/questions/27816217/
-         * how-to-save-recyclerviews-scroll-position-using-recyclerview-state
-         * (Answer Patrick kennedy and Gokhan Baris Aker)
+        /*
+          Source code: https://stackoverflow.com/questions/27816217/
+          how-to-save-recyclerviews-scroll-position-using-recyclerview-state
+          (Answer Patrick kennedy and Gokhan Baris Aker)
          */
         selectedState.putParcelable(LAYOUT_MANAGER_STATE_KEY, mGridLayoutManager.onSaveInstanceState());
     }

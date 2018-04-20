@@ -39,9 +39,9 @@
             android:layout_height="110dp"
             android:layout_gravity="center"
             android:paddingBottom="16dp"
-            android:src="@drawable/powered_by_tmbd_blue"/>
+            android:src="@drawable/powered_by_tmbd_blue"
+            android:contentDescription="@string/descrip_logo_tmdb_powered"/>
         </LinearLayout>
 
     </android.support.design.widget.NavigationView>
-
 </android.support.v4.widget.DrawerLayout>

@@ -13,9 +13,6 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <!-- OnNavigationItemSelected Menu toasts -->
-    <string name="toast_favourites">Coming soon. Will show your Favourite Movies</string>
-
     <!-- Error messages -->
     <string name="connection_error_message">Something went wrong.\nPlease
         make sure you entered your API key and/or check your internet connection.\n\nIn
@@ -25,9 +22,13 @@
     <!-- Content description -->
     <string name="descrip_backdrop">The movie\'s backdrop image</string>
     <string name="descrip_poster">The movie\'s poster</string>
+    <string name="descrip_logo_tmdb_powered">Powered by TMDB logo</string>
+    <string name="video_play_icon">Play video icon</string>
+    <string name="more_videos">Scroll to the left for more videos</string>
 
     <!-- Details Activity -->
-    <string name="coming_soon">(More features coming soon...)</string>
     <string name="trailer_video">The movies\'s trailer</string>
+    <string name="trailers_title">Trailers</string>
+    <string name="reviews_title">Reviews</string>
 
 </resources>

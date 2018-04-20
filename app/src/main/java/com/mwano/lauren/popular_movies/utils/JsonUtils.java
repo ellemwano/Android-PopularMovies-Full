@@ -1,7 +1,5 @@
 package com.mwano.lauren.popular_movies.utils;
 
-import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
 import com.mwano.lauren.popular_movies.model.Movie;
@@ -12,9 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by ElleMwa on 24/02/2018.
@@ -38,27 +34,23 @@ public class JsonUtils {
     private static final String REVIEW_URL = "url";
     private static final String TAG = JsonUtils.class.getSimpleName();
 
+    // Constructor
     private JsonUtils() {
     }
 
     /**
-     * Parse
-     * @param json
-     * @return
+     * Parse the json from TMDB API and return a list of movies
+     * @param json from The Movie DataBase API
+     * @return An ArrayList of movie objects
      */
     public static ArrayList<Movie> parseMovieJson(String json) {
-
         ArrayList<Movie> movies = new ArrayList<>();
-
         try {
             JSONObject rootObject = new JSONObject(json);
-
             if (rootObject.has(RESULTS)) {
                 JSONArray movieArray = rootObject.getJSONArray(RESULTS);
-
                 for (int i = 0; i < movieArray.length(); i++) {
                     JSONObject currentMovie = movieArray.getJSONObject(i);
-
                     int id = currentMovie.optInt(ID);
                     String imagePath = currentMovie.optString(POSTER_PATH);
                     String backdropPath = currentMovie.optString(BACKDROP_PATH);
@@ -66,7 +58,6 @@ public class JsonUtils {
                     String synopsis = currentMovie.optString(OVERVIEW);
                     String releaseDate = currentMovie.optString(RELEASE_DATE);
                     Double rating = currentMovie.optDouble(VOTE_AVERAGE);
-
                     Movie movie = new Movie(id, imagePath, backdropPath, originalTitle, synopsis, releaseDate, rating);
                     movies.add(movie);
                 }
@@ -81,26 +72,20 @@ public class JsonUtils {
 
 
     /**
-     *
-     * @param json
-     * @return
+     * Parse the json from TMDB API and return a list of videos
+     * @param json from The Movie DataBase API
+     * @return An ArrayList of video objects
      */
     public static ArrayList<Video> parseVideoJson (String json) {
-
         ArrayList<Video> videos = new ArrayList<>();
-
         try {
             JSONObject rootObject = new JSONObject(json);
-
             if (rootObject.has(RESULTS)) {
                 JSONArray videoArray = rootObject.getJSONArray(RESULTS);
-
                 for (int i = 0; i < videoArray.length(); i++) {
                     JSONObject currentVideo = videoArray.getJSONObject(i);
-
                     String videoName = currentVideo.optString(VIDEO_NAME);
                     String videoKey = currentVideo.optString(VIDEO_KEY);
-
                     Video video = new Video(videoName, videoKey);
                     videos.add(video);
                 }
@@ -114,28 +99,22 @@ public class JsonUtils {
     }
 
     /**
-     *
-     * @param json
-     * @return
+     * Parse the json from TMDB API and return a list of reviews
+     * @param json from The Movie DataBase API
+     * @return An ArrayList of review objects
      */
     public static ArrayList<Review> parseReviewJson (String json) {
-
         ArrayList<Review> reviews = new ArrayList<>();
-
         try {
             JSONObject rootObject = new JSONObject(json);
-
             if (rootObject.has(RESULTS)) {
                 JSONArray reviewArray = rootObject.getJSONArray(RESULTS);
-
                 for (int i = 0; i < reviewArray.length(); i++) {
                     JSONObject currentReview = reviewArray.getJSONObject(i);
-
                     String reviewId = currentReview.optString(REVIEW_ID);
                     String reviewAuthor = currentReview.optString(REVIEW_AUTHOR);
                     String reviewContent = currentReview.optString(REVIEW_CONTENT);
                     String reviewUrl = currentReview.optString(REVIEW_URL);
-
                     Review review = new Review(reviewId, reviewAuthor, reviewContent, reviewUrl);
                     reviews.add(review);
                 }

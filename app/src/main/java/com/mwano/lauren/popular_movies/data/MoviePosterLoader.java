@@ -13,8 +13,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-import static com.mwano.lauren.popular_movies.MainActivity.POPULAR;
-import static com.mwano.lauren.popular_movies.MainActivity.TOP_RATED;
+import static com.mwano.lauren.popular_movies.ui.MainActivity.POPULAR;
+import static com.mwano.lauren.popular_movies.ui.MainActivity.TOP_RATED;
 
 
 /**
