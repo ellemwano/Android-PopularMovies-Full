@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.LoaderManager;
@@ -54,11 +55,13 @@ public class MainActivity extends AppCompatActivity implements
     private FavouriteAdapter mFavouriteAdapter;
     private int displaySelected;
     private String loadedDisplay;
+    private GridLayoutManager mGridLayoutManager;
 
     public static final int FAVOURITES_LOADER = 50;
     private static final String STATE_DISPLAY_KEY = "display selected";
     private static final String DISPLAY_LOADED_KEY = "display loaded";
     private static final String LAYOUT_MANAGER_STATE_KEY = "LayoutManager state";
+    private Parcelable mSavedRecyclerlayoutState;
 
     //
     private LoaderManager.LoaderCallbacks FavouritesCursorLoader =
@@ -91,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements
                 @Override
                 public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
                     mFavouriteAdapter.swapCursor(data);
+                    mRecyclerView.getLayoutManager().onRestoreInstanceState(mSavedRecyclerlayoutState);
                 }
 
                 @Override
@@ -137,7 +141,8 @@ public class MainActivity extends AppCompatActivity implements
         // (Source code, Udacity forum mentor Nisha Shinde:
         // https://discussions.udacity.com/t/gridlayoutmanager-recyclerview/499251/4)
         mColumnsNumber = (int) getResources().getInteger(R.integer.num_of_columns);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, mColumnsNumber));
+        mGridLayoutManager = new GridLayoutManager(this, mColumnsNumber);
+        mRecyclerView.setLayoutManager(mGridLayoutManager);
         mRecyclerView.setHasFixedSize(true);
         mMovieAdapter = new MovieAdapter(this, movies, this);
         mFavouriteAdapter = new FavouriteAdapter(this, this);
@@ -180,6 +185,9 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onLoadFinished(Loader<ArrayList<Movie>> loader, ArrayList<Movie> movies) {
         if (movies != null) {
+//            mGridLayoutManager = new GridLayoutManager(this, mColumnsNumber);
+//            mRecyclerView.setLayoutManager(mGridLayoutManager);
+            mRecyclerView.getLayoutManager().onRestoreInstanceState(mSavedRecyclerlayoutState);
             mMovieAdapter.setMovieData(movies);
         } else {
             showConnectionErrorMessage();
@@ -264,6 +272,7 @@ public class MainActivity extends AppCompatActivity implements
             }
         } else {
             getSupportLoaderManager().restartLoader(FAVOURITES_LOADER, null, FavouritesCursorLoader);
+            //mRecyclerView.getLayoutManager().onRestoreInstanceState(mSavedRecyclerlayoutState);
             mRecyclerView.setAdapter(mFavouriteAdapter);
             setTitle("My favourite movies");
         }
@@ -285,6 +294,16 @@ public class MainActivity extends AppCompatActivity implements
         super.onSaveInstanceState(selectedState);
         selectedState.putInt(STATE_DISPLAY_KEY, displaySelected);
         selectedState.putString(DISPLAY_LOADED_KEY, loadedDisplay);
+        selectedState.putParcelable(LAYOUT_MANAGER_STATE_KEY, mGridLayoutManager.onSaveInstanceState());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            mSavedRecyclerlayoutState = savedInstanceState.getParcelable(LAYOUT_MANAGER_STATE_KEY);
+            mRecyclerView.getLayoutManager().onRestoreInstanceState(mSavedRecyclerlayoutState);
+        }
     }
 }
 
