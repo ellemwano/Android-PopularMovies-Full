@@ -56,8 +56,9 @@ public class MainActivity extends AppCompatActivity implements
     private String loadedDisplay;
 
     public static final int FAVOURITES_LOADER = 50;
-    public static final String STATE_DISPLAY_KEY = "display selected";
-    public static final String DISPLAY_LOADED_KEY = "display loaded";
+    private static final String STATE_DISPLAY_KEY = "display selected";
+    private static final String DISPLAY_LOADED_KEY = "display loaded";
+    private static final String LAYOUT_MANAGER_STATE_KEY = "LayoutManager state";
 
     //
     private LoaderManager.LoaderCallbacks FavouritesCursorLoader =
@@ -153,12 +154,13 @@ public class MainActivity extends AppCompatActivity implements
 
         // Persistence
         if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(STATE_DISPLAY_KEY)) {
+            if (savedInstanceState.containsKey(STATE_DISPLAY_KEY) && savedInstanceState.containsKey(DISPLAY_LOADED_KEY)) {
                 displaySelected = savedInstanceState.getInt(STATE_DISPLAY_KEY);
                 loadedDisplay = savedInstanceState.getString(DISPLAY_LOADED_KEY);
             }
         } else {
             displaySelected = R.id.nav_popular;
+            loadedDisplay = POPULAR;
 //            if (moviePosterLoader == null) {
 //                getSupportLoaderManager().initLoader(MOVIE_QUERY_LOADER, popularBundle, MainActivity.this);
 //            } else {
