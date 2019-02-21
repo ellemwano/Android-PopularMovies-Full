@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">Popular Movies</string>
+    <string name="app_name">MovieNight</string>
 
     <!-- Navigation Drawer - Navigation Header -->
-    <string name="my_app_title">Popular Movies App</string>
+    <string name="my_app_title">MOVIE NIGHT</string>
 
     <!-- Navigation Drawer - Menu-->
     <string name="popular_movies">Popular movies</string>
@@ -28,7 +28,7 @@
 
     <!-- Details Activity -->
     <string name="trailer_video">The movies\'s trailer</string>
-    <string name="trailers_title">Trailers</string>
-    <string name="reviews_title">Reviews</string>
+    <string name="trailers_title">TRAILERS</string>
+    <string name="reviews_title">REVIEWS</string>
 
 </resources>

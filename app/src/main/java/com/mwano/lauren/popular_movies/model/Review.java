@@ -7,7 +7,10 @@ public class Review {
     private String mReviewContent;
     private String mReviewUrl;
 
-    public Review (String reviewId, String reviewAuthor, String reviewContent, String reviewUrl) {
+    public Review (String reviewId,
+                   String reviewAuthor,
+                   String reviewContent,
+                   String reviewUrl) {
         mReviewId = reviewId;
         mReviewAuthor = reviewAuthor;
         mReviewContent = reviewContent;
@@ -48,6 +51,9 @@ public class Review {
 
     @Override
     public String toString() {
-        return mReviewId + "--" + mReviewAuthor + "--" + mReviewContent + "--" + mReviewUrl + "--";
+        return mReviewId + "--"
+                + mReviewAuthor + "--"
+                + mReviewContent + "--"
+                + mReviewUrl + "--";
     }
 }

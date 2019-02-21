@@ -65,44 +65,45 @@ public class MainActivity extends AppCompatActivity implements
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private LoaderManager.LoaderCallbacks FavouritesCursorLoader =
-            new LoaderManager.LoaderCallbacks<Cursor>() {
-                @Override
-                public Loader<Cursor> onCreateLoader(int loaderId, Bundle args) {
-                    switch (loaderId) {
-                        case FAVOURITES_LOADER:
-                            // Define a projection that specifies the columns from the table
-                            String[] projection = {
-                                    FavouritesContract.FavouritesEntry.COLUMN_MOVIE_ID,
-                                    FavouritesContract.FavouritesEntry.COLUMN_MOVIE_POSTER,
-                                    FavouritesContract.FavouritesEntry.COLUMN_MOVIE_BACKDROP,
-                                    FavouritesContract.FavouritesEntry.COLUMN_MOVIE_TITLE,
-                                    FavouritesContract.FavouritesEntry.COLUMN_MOVIE_SYNOPSIS,
-                                    FavouritesContract.FavouritesEntry.COLUMN_MOVIE_RELEASE_DATE,
-                                    FavouritesContract.FavouritesEntry.COLUMN_RATING
-                            };
-                            return new CursorLoader(MainActivity.this,
-                                    FavouritesContract.FavouritesEntry.CONTENT_URI,
-                                    projection,
-                                    null,
-                                    null,
-                                    null);
-                        default:
-                            throw new RuntimeException("Loader not implemented: " + loaderId);
-                    }
+        new LoaderManager.LoaderCallbacks<Cursor>() {
+            @Override
+            public Loader<Cursor> onCreateLoader(int loaderId, Bundle args) {
+                switch (loaderId) {
+                    case FAVOURITES_LOADER:
+                        // Define a projection that specifies the columns from the table
+                        String[] projection = {
+                                FavouritesContract.FavouritesEntry.COLUMN_MOVIE_ID,
+                                FavouritesContract.FavouritesEntry.COLUMN_MOVIE_POSTER,
+                                FavouritesContract.FavouritesEntry.COLUMN_MOVIE_BACKDROP,
+                                FavouritesContract.FavouritesEntry.COLUMN_MOVIE_TITLE,
+                                FavouritesContract.FavouritesEntry.COLUMN_MOVIE_SYNOPSIS,
+                                FavouritesContract.FavouritesEntry.COLUMN_MOVIE_RELEASE_DATE,
+                                FavouritesContract.FavouritesEntry.COLUMN_RATING
+                        };
+                        return new CursorLoader(MainActivity.this,
+                                FavouritesContract.FavouritesEntry.CONTENT_URI,
+                                projection,
+                                null,
+                                null,
+                                null);
+                    default:
+                        throw new RuntimeException("Loader not implemented: " + loaderId);
                 }
+            }
 
-                @Override
-                public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-                    mFavouriteAdapter.swapCursor(data);
-                    // Restore scrolling position upon navigation and rotation
-                    mRecyclerView.getLayoutManager().onRestoreInstanceState(mSavedRecyclerlayoutState);
-                }
+            @Override
+            public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+                mFavouriteAdapter.swapCursor(data);
+                // Restore scrolling position upon navigation and rotation
+                mRecyclerView.getLayoutManager()
+                        .onRestoreInstanceState(mSavedRecyclerlayoutState);
+            }
 
-                @Override
-                public void onLoaderReset(Loader loader) {
-                    mFavouriteAdapter.swapCursor(null);
-                }
-            };
+            @Override
+            public void onLoaderReset(Loader loader) {
+                mFavouriteAdapter.swapCursor(null);
+            }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,7 +162,8 @@ public class MainActivity extends AppCompatActivity implements
 
         // Restore user's display choice from menu upon app navigation and rotation
         if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(STATE_DISPLAY_KEY) && savedInstanceState.containsKey(DISPLAY_LOADED_KEY)) {
+            if (savedInstanceState.containsKey(STATE_DISPLAY_KEY)
+                    && savedInstanceState.containsKey(DISPLAY_LOADED_KEY)) {
                 displaySelected = savedInstanceState.getInt(STATE_DISPLAY_KEY);
                 loadedDisplay = savedInstanceState.getString(DISPLAY_LOADED_KEY);
             }
@@ -241,7 +243,8 @@ public class MainActivity extends AppCompatActivity implements
         if (sortMode!= null && (sortMode.equals(POPULAR) || sortMode.equals(TOP_RATED))) {
             Bundle sortModeBundle = new Bundle();
             sortModeBundle.putString(SORT_QUERY, sortMode);
-            getSupportLoaderManager().restartLoader(MOVIE_QUERY_LOADER, sortModeBundle, MainActivity.this);
+            getSupportLoaderManager()
+                    .restartLoader(MOVIE_QUERY_LOADER, sortModeBundle, MainActivity.this);
             // Set adapter to RecyclerView in layout
             mRecyclerView.setAdapter(mMovieAdapter);
             if (sortMode.equals(POPULAR)) {
@@ -250,7 +253,8 @@ public class MainActivity extends AppCompatActivity implements
                 setTitle(R.string.top_rated_movies);
             }
         } else {
-            getSupportLoaderManager().restartLoader(FAVOURITES_LOADER, null, FavouritesCursorLoader);
+            getSupportLoaderManager()
+                    .restartLoader(FAVOURITES_LOADER, null, FavouritesCursorLoader);
             mRecyclerView.setAdapter(mFavouriteAdapter);
             setTitle(R.string.favourite_movies);
         }
@@ -277,7 +281,8 @@ public class MainActivity extends AppCompatActivity implements
           how-to-save-recyclerviews-scroll-position-using-recyclerview-state
           (Answer Patrick kennedy and Gokhan Baris Aker)
          */
-        selectedState.putParcelable(LAYOUT_MANAGER_STATE_KEY, mGridLayoutManager.onSaveInstanceState());
+        selectedState.putParcelable(LAYOUT_MANAGER_STATE_KEY,
+                mGridLayoutManager.onSaveInstanceState());
     }
 
     @Override

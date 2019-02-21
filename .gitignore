@@ -9,3 +9,6 @@
 .externalNativeBuild
 /gradle.properties
 
+
+.idea
+.gitignore

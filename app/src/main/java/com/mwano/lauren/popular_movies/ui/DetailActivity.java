@@ -4,6 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -40,6 +43,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import static com.mwano.lauren.popular_movies.utils.MovieApi.REVIEW_END;
@@ -296,7 +300,11 @@ public class DetailActivity extends AppCompatActivity
                         .into(mBackdropView);
                 mTitleView.setText(currentMovie.getOriginalTitle());
                 mSynopsisView.setText(currentMovie.getSynopsis());
-                mReleaseView.setText(currentMovie.getReleaseDate());
+                try {
+                    mReleaseView.setText(currentMovie.getReleaseDate());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 mRatingView.setText(String.valueOf(currentMovie.getRating()));
                 setTitle(currentMovie.getOriginalTitle());
             }
@@ -356,7 +364,11 @@ public class DetailActivity extends AppCompatActivity
                     fab.setImageResource(R.drawable.ic_details_favourite_border);
                 } else {
                     // Click will add movie to Favourites
-                    addFavourite();
+                    try {
+                        addFavourite();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     // Click will set FAB colour to full heart
                     fab.setImageResource(R.drawable.ic_details_favourite_full);
                 }
@@ -380,7 +392,7 @@ public class DetailActivity extends AppCompatActivity
     /**
      * Add the current movie to the Favourites database, confirming insertion with a toast
      */
-    private void addFavourite() {
+    private void addFavourite() throws ParseException {
         // Create a ContentValues object with column names as the keys and movie data as the values
         ContentValues values = new ContentValues();
         values.put(FavouritesEntry.COLUMN_MOVIE_ID, currentMovie.getId());
@@ -395,7 +407,7 @@ public class DetailActivity extends AppCompatActivity
             mCurrentMovieUri = getContentResolver().insert(FavouritesEntry.CONTENT_URI, values);
             // Add a toast to confirm insertion
             mIsFavourite = true;
-            Toast.makeText(DetailActivity.this,currentMovie.getOriginalTitle() + " is added to Favourites", Toast.LENGTH_LONG).show();
+            addToast(currentMovie.getOriginalTitle() + " is added to Favourites");
         } catch (Exception e){
             mCurrentMovieUri = null;
         }
@@ -413,7 +425,7 @@ public class DetailActivity extends AppCompatActivity
             if (moviesDeleted != 0) {
                 // Add a toast to confirm deletion
                 mIsFavourite = false;
-                Toast.makeText(DetailActivity.this, currentMovie.getOriginalTitle() + " is removed from Favourites", Toast.LENGTH_LONG).show();
+                addToast(currentMovie.getOriginalTitle() + " is removed from Favourites");
             }
         }
     }
@@ -425,5 +437,27 @@ public class DetailActivity extends AppCompatActivity
             NavUtils.navigateUpFromSameTask(this);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Customise the toast (background colour and text colour) when adding and removing movie from db
+     * @param text - The message to display
+     */
+    public void addToast(String text) {
+        Toast toast = Toast.makeText(DetailActivity.this, text, Toast.LENGTH_LONG);
+        View view = toast.getView();
+
+        // Add a custom background colour
+        view.getBackground()
+            .setColorFilter(getResources()
+            .getColor(R.color.colorPrimaryDark), PorterDuff.Mode.SRC_IN);
+
+        // Get the toast's TextView to edit the message
+        TextView message = view.findViewById(android.R.id.message);
+        // Add a custom text colour
+        message.setTextColor(getResources().getColor(R.color.colorAccent));
+        message.setTypeface(message.getTypeface(), Typeface.BOLD);
+
+        toast.show();
     }
 }

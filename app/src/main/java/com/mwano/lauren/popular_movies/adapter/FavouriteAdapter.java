@@ -13,6 +13,8 @@ import com.mwano.lauren.popular_movies.data.FavouritesContract;
 import com.mwano.lauren.popular_movies.model.Movie;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+
 
 public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.FavouriteViewHolder> {
 
@@ -86,7 +88,11 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
             int adapterPosition = getAdapterPosition();
             mCursor.moveToPosition(adapterPosition);
             // Get movie from database
-            mFavouriteClickHandler.onClick(queryFavourite());
+            try {
+                mFavouriteClickHandler.onClick(queryFavourite());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
         /**
@@ -94,7 +100,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
          * in the DetailActivity intent)
          * @return The currentMovie object
          */
-        private Movie queryFavourite() {
+        private Movie queryFavourite() throws ParseException {
             Movie currentFavouriteMovie = new Movie();
             currentFavouriteMovie.setId(mCursor.getInt(
                     mCursor.getColumnIndex(FavouritesContract.FavouritesEntry.COLUMN_MOVIE_ID)));

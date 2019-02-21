@@ -1,8 +1,14 @@
 package com.mwano.lauren.popular_movies.model;
 
+import android.icu.text.DateFormat;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 /**
  * Created by ElleMwa on 22/02/2018.
@@ -22,7 +28,12 @@ public class Movie implements Parcelable {
     public static final String BASE_BACKDROP_PATH = "http://image.tmdb.org/t/p/w500/";
 
     public Movie
-            (int id, String imagePath, String backdropPath, String originalTitle, String synopsis, String releaseDate,
+            (int id,
+             String imagePath,
+             String backdropPath,
+             String originalTitle,
+             String synopsis,
+             String releaseDate,
              Double rating) {
         mId = id;
         mImagePath = imagePath;
@@ -76,12 +87,12 @@ public class Movie implements Parcelable {
         mSynopsis = synopsis;
     }
 
-    public String getReleaseDate(){
-        return mReleaseDate;
+    public String getReleaseDate() throws ParseException {
+        return formatDate(mReleaseDate);
     }
 
-    public void setReleaseDate (String releaseDate) {
-        mReleaseDate = releaseDate;
+    public void setReleaseDate (String releaseDate) throws ParseException {
+        mReleaseDate = formatDate(releaseDate);
     }
 
     public double getRating() {
@@ -124,6 +135,25 @@ public class Movie implements Parcelable {
         return builtBackdropUri;
     }
 
+    /**
+     * Format release date as MMM dd, yyyy
+     * @param date - The original date (format yyyy-MM-dd)
+     * @return The newly formatted date as a String
+     * @throws ParseException
+     */
+    private String formatDate(String date) throws ParseException {
+        String newDate = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            newDate = DateFormat.getDateInstance(DateFormat.MEDIUM).format(date);
+        } else {
+            SimpleDateFormat spf=new SimpleDateFormat("yyyy-MM-dd");
+            Date tempDate=spf.parse(date);
+            spf= new SimpleDateFormat("MMM dd, yyyy");
+            newDate = spf.format(tempDate);
+        }
+        return newDate;
+    }
+
     // Implement Parcelable
     private Movie(Parcel in) {
         mId = in.readInt();
@@ -141,8 +171,13 @@ public class Movie implements Parcelable {
     }
 
     public String toString() {
-        return mId + "--" + mImagePath + "--" + mBackdropPath + "--" + mOriginalTitle + "--"
-                + mSynopsis + "--" + mReleaseDate + "--" + mRating;
+        return mId + "--"
+                + mImagePath + "--"
+                + mBackdropPath + "--"
+                + mOriginalTitle + "--"
+                + mSynopsis + "--"
+                + mReleaseDate + "--"
+                + mRating;
     }
 
     @Override
