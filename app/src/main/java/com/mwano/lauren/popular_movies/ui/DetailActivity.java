@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -300,11 +299,7 @@ public class DetailActivity extends AppCompatActivity
                         .into(mBackdropView);
                 mTitleView.setText(currentMovie.getOriginalTitle());
                 mSynopsisView.setText(currentMovie.getSynopsis());
-                try {
-                    mReleaseView.setText(currentMovie.getReleaseDate());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                mReleaseView.setText(currentMovie.getReleaseDate());
                 mRatingView.setText(String.valueOf(currentMovie.getRating()));
                 setTitle(currentMovie.getOriginalTitle());
             }
@@ -385,8 +380,12 @@ public class DetailActivity extends AppCompatActivity
         }
     }
 
+    // Implicit intent to open full review in web browser, from review URL
     @Override
     public void onClickReview(Review currentReview) {
+        Intent intentFullReviewBrowser = new Intent(Intent.ACTION_VIEW);
+        intentFullReviewBrowser.setData(Uri.parse(currentReview.getReviewUrl()));
+        startActivity(intentFullReviewBrowser);
     }
 
     /**
@@ -444,18 +443,18 @@ public class DetailActivity extends AppCompatActivity
      * @param text - The message to display
      */
     public void addToast(String text) {
-        Toast toast = Toast.makeText(DetailActivity.this, text, Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(DetailActivity.this, text, Toast.LENGTH_SHORT);
         View view = toast.getView();
 
         // Add a custom background colour
         view.getBackground()
             .setColorFilter(getResources()
-            .getColor(R.color.colorPrimaryDark), PorterDuff.Mode.SRC_IN);
+            .getColor(R.color.colorAccent), PorterDuff.Mode.SRC_IN);
 
         // Get the toast's TextView to edit the message
         TextView message = view.findViewById(android.R.id.message);
         // Add a custom text colour
-        message.setTextColor(getResources().getColor(R.color.colorAccent));
+        message.setTextColor(getResources().getColor(R.color.white));
         message.setTypeface(message.getTypeface(), Typeface.BOLD);
 
         toast.show();

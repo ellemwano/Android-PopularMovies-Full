@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 /**
@@ -56,8 +57,14 @@ public class JsonUtils {
                     String backdropPath = currentMovie.optString(BACKDROP_PATH);
                     String originalTitle = currentMovie.optString(ORIGINAL_TITLE);
                     String synopsis = currentMovie.optString(OVERVIEW);
-                    String releaseDate = currentMovie.optString(RELEASE_DATE);
+                    String originalReleaseDate = currentMovie.optString(RELEASE_DATE);
                     Double rating = currentMovie.optDouble(VOTE_AVERAGE);
+                    String releaseDate = null;
+                    try {
+                        releaseDate = Movie.formatDate(originalReleaseDate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     Movie movie = new Movie(id, imagePath, backdropPath, originalTitle, synopsis, releaseDate, rating);
                     movies.add(movie);
                 }

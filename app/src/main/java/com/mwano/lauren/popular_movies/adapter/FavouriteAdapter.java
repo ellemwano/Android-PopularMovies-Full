@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
 import com.mwano.lauren.popular_movies.R;
 import com.mwano.lauren.popular_movies.data.FavouritesContract;
 import com.mwano.lauren.popular_movies.model.Movie;
@@ -18,7 +17,6 @@ import java.text.ParseException;
 
 public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.FavouriteViewHolder> {
 
-    /** TODO cf Sunshine*/
     private Context mContext;
     private final FavouriteAdapterOnClickHandler mFavouriteClickHandler;
     private Cursor mCursor;

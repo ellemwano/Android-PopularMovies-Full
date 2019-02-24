@@ -87,12 +87,12 @@ public class Movie implements Parcelable {
         mSynopsis = synopsis;
     }
 
-    public String getReleaseDate() throws ParseException {
-        return formatDate(mReleaseDate);
+    public String getReleaseDate() {
+        return mReleaseDate;
     }
 
-    public void setReleaseDate (String releaseDate) throws ParseException {
-        mReleaseDate = formatDate(releaseDate);
+    public void setReleaseDate (String releaseDate) {
+        mReleaseDate = releaseDate;
     }
 
     public double getRating() {
@@ -141,7 +141,7 @@ public class Movie implements Parcelable {
      * @return The newly formatted date as a String
      * @throws ParseException
      */
-    private String formatDate(String date) throws ParseException {
+    public static String formatDate(String date) throws ParseException {
         String newDate = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             newDate = DateFormat.getDateInstance(DateFormat.MEDIUM).format(date);

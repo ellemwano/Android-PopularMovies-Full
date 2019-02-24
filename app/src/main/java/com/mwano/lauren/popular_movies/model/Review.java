@@ -54,6 +54,6 @@ public class Review {
         return mReviewId + "--"
                 + mReviewAuthor + "--"
                 + mReviewContent + "--"
-                + mReviewUrl + "--";
+                + mReviewUrl;
     }
 }

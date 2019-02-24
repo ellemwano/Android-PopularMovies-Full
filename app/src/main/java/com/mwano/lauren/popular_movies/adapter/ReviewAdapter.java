@@ -46,8 +46,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
     public void onBindViewHolder(ReviewAdapter.ReviewViewHolder reviewViewHolder, int position) {
         mContext = reviewViewHolder.mReviewAuthorView.getContext();
         Review mCurrentReview = mReviews.get(position);
-        reviewViewHolder.mReviewAuthorView.setText(mCurrentReview.getReviewAuthor());
-        reviewViewHolder.mReviewContentView.setText(mCurrentReview.getReviewContent());
+        reviewViewHolder.bind(mCurrentReview);
     }
 
     @Override
@@ -82,6 +81,11 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
             int adapterPosition = getAdapterPosition();
             Review currentReview = mReviews.get(adapterPosition);
             mReviewClickHandler.onClickReview(currentReview);
+        }
+
+        private void bind (Review review) {
+            mReviewAuthorView.setText(review.getReviewAuthor());
+            mReviewContentView.setText(review.getReviewContent());
         }
     }
 }
