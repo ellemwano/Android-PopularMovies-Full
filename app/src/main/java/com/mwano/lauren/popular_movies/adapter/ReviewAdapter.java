@@ -1,6 +1,7 @@
 package com.mwano.lauren.popular_movies.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,21 +17,13 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
 
     private Context mContext;
     private ArrayList<Review> mReviews;
-    private final ReviewAdapterOnClickHandler mReviewClickHandler;
+    private static final int EXPANDED_POSITION_VALUE = -1;
+    private int expandedItemPosition = EXPANDED_POSITION_VALUE;
+    private int previousExpandedItemPosition = EXPANDED_POSITION_VALUE;
 
-    /**
-     * Create an OnClickHandler interface
-     */
-    public interface ReviewAdapterOnClickHandler {
-        void onClickReview(Review currentReview);
-    }
-
-    // ReviewAdapter constructor
-    public ReviewAdapter (Context context, ArrayList<Review> reviews,
-                          ReviewAdapterOnClickHandler reviewClickHandler) {
+    public ReviewAdapter (Context context, ArrayList<Review> reviews) {
         mContext = context;
         mReviews = reviews;
-        mReviewClickHandler = reviewClickHandler;
     }
 
     @Override
@@ -43,10 +36,35 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
     }
 
     @Override
-    public void onBindViewHolder(ReviewAdapter.ReviewViewHolder reviewViewHolder, int position) {
+    public void onBindViewHolder(@NonNull ReviewAdapter.ReviewViewHolder reviewViewHolder, int position) {
         mContext = reviewViewHolder.mReviewAuthorView.getContext();
         Review mCurrentReview = mReviews.get(position);
         reviewViewHolder.bind(mCurrentReview);
+
+        /*
+        Set expandable/collapsable TextView. 2 review textviews = reduced review and full review.
+        When reduced review is clicked, visibility set to gone and full review set to visible.
+        Text automatically collapses when other review clicked or when clicked again.
+        Need mReviewRecyclerView.setHasFixedSize() set to false in DetailActivity.
+        Source: https://stackoverflow.com/a/48092441/8691157
+         */
+        final boolean isExpanded = position == expandedItemPosition;
+        reviewViewHolder.mReviewContentView.setVisibility(isExpanded ? View.GONE : View.VISIBLE);
+        reviewViewHolder.mReviewContentViewFull.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+        reviewViewHolder.itemView.setActivated(isExpanded); //Set to true (if to be activated) or false
+
+        if (isExpanded) {
+            previousExpandedItemPosition = position;
+        }
+
+        reviewViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                expandedItemPosition = isExpanded ? EXPANDED_POSITION_VALUE : position;
+                notifyItemChanged(previousExpandedItemPosition);
+                notifyItemChanged(position);
+            }
+        });
     }
 
     @Override
@@ -63,29 +81,24 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
     /**
      * Create a ViewHolder with a click listener
      */
-    public class ReviewViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ReviewViewHolder extends RecyclerView.ViewHolder {
 
         public final TextView mReviewAuthorView;
         public final TextView mReviewContentView;
+        public final TextView mReviewContentViewFull;
 
         // ReviewViewHolder constructor
         public ReviewViewHolder(View view) {
             super(view);
             mReviewAuthorView = (TextView) view.findViewById(R.id.author_name);
             mReviewContentView = (TextView) view.findViewById(R.id.review_content);
-            view.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            int adapterPosition = getAdapterPosition();
-            Review currentReview = mReviews.get(adapterPosition);
-            mReviewClickHandler.onClickReview(currentReview);
+            mReviewContentViewFull = (TextView) view.findViewById(R.id.review_content_full);
         }
 
         private void bind (Review review) {
             mReviewAuthorView.setText(review.getReviewAuthor());
             mReviewContentView.setText(review.getReviewContent());
+            mReviewContentViewFull.setText(review.getReviewContent());
         }
     }
 }

@@ -53,8 +53,7 @@ import static com.mwano.lauren.popular_movies.utils.MovieApi.VIDEO_END;
  */
 
 public class DetailActivity extends AppCompatActivity
-        implements VideoAdapter.VideoAdapterOnClickHandler,
-        ReviewAdapter.ReviewAdapterOnClickHandler {
+        implements VideoAdapter.VideoAdapterOnClickHandler {
 
     private Toolbar mToolbar;
     private ImageView mBackdropView;
@@ -208,7 +207,7 @@ public class DetailActivity extends AppCompatActivity
                     if (reviews != null) {
                         mReviewAdapter.setReviewData(reviews);
                     } else {
-                        //showConnectionErrorMessage();
+                        // showConnectionErrorMessage();
                         Log.e(TAG, "Error displaying reviews");
                     }
                 }
@@ -323,8 +322,8 @@ public class DetailActivity extends AppCompatActivity
         //Get reference to Review RecyclerView
         mReviewRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_reviews);
         mReviewRecyclerView.setLayoutManager(new LinearLayoutManager(DetailActivity.this));
-        mReviewRecyclerView.setHasFixedSize(true);
-        mReviewAdapter = new ReviewAdapter(this, reviews, this);
+        mReviewRecyclerView.setHasFixedSize(false);
+        mReviewAdapter = new ReviewAdapter(this, reviews);
         mReviewRecyclerView.setAdapter(mReviewAdapter);
 
         String movieId = String.valueOf(currentMovie.getId());
@@ -378,14 +377,6 @@ public class DetailActivity extends AppCompatActivity
         if(intentPlayVideo.resolveActivity(getPackageManager()) != null) {
             startActivity(intentPlayVideo);
         }
-    }
-
-    // Implicit intent to open full review in web browser, from review URL
-    @Override
-    public void onClickReview(Review currentReview) {
-        Intent intentFullReviewBrowser = new Intent(Intent.ACTION_VIEW);
-        intentFullReviewBrowser.setData(Uri.parse(currentReview.getReviewUrl()));
-        startActivity(intentFullReviewBrowser);
     }
 
     /**

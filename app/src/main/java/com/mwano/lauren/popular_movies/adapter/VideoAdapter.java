@@ -70,7 +70,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
     /**
      * Create a ViewHolder with a click listener
      */
-    public class VideoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class VideoViewHolder extends RecyclerView.ViewHolder {
 
         public final ImageView mVideoImageView;
         public final TextView mVideoTitleView;
@@ -80,14 +80,14 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
             super(view);
             mVideoImageView = (ImageView)view.findViewById(R.id.video_thumbnail);
             mVideoTitleView = (TextView)view.findViewById(R.id.video_title);
-            view.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            int adapterPosition = getAdapterPosition();
-            Video currentVideo = mVideos.get(adapterPosition);
-            mVideoClickHandler.onClickVideo(currentVideo);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int adapterPosition = getAdapterPosition();
+                    Video currentVideo = mVideos.get(adapterPosition);
+                    mVideoClickHandler.onClickVideo(currentVideo);
+                }
+            });
         }
     }
 }
