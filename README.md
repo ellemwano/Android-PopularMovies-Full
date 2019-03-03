@@ -11,35 +11,37 @@ _Your call._
 
 # MovieNight
 Projects #1 and #2 of the [Android Developer](https://eu.udacity.com/course/android-developer-nanodegree-by-google--nd801) Nanodegree by Udacity.
+1. [Project Overview](https://github.com/ellemwano/android-MovieNight#project-overview)
+2. [Why this Project](https://github.com/ellemwano/android-MovieNight#why-this-project)
+3. [Learning Objectives](https://github.com/ellemwano/android-MovieNight#learning-objectives)
+4. [Project Requirements](https://github.com/ellemwano/android-MovieNight#project-requirements)
+5. [Completed Project - MovieNight](https://github.com/ellemwano/android-MovieNight#completed-project-movienight)
 
-## Project Overview
-Build an app to allow users to discover the most popular movies playing. The development of this app is split in two stages. In this stage 1 I built the core experience of the movies app.
-
+## 1- Project Overview
+Build an app to allow users to discover the most popular or the highest-rated movies playing. The development of this app is split in two stages:
 - **Stage 1**
   * Present the user with a grid arrangement of movie posters upon launch.
-  * Allow your user to change sort order via a setting:
-The sort order can be by most popular or by highest-rated
+  * Allow your user to change sort order via a setting. The sort order can be by most popular or by highest-rated
   * Allow the user to tap on a movie poster and transition to a details screen with additional information such as: original title, movie poster image thumbnail, a plot synopsis (called `overview` in the api), user rating (called `vote_average` in the api), release date
-
 - **Stage 2**
-  * You’ll allow users to view and play trailers ( either in the youtube app or a web browser).
-  * You’ll allow users to read reviews of a selected movie.
-  * You’ll also allow users to mark a movie as a favorite in the details view by tapping a button(star).
-  * You'll create a database to store the names and ids of the user's favorite movies (and optionally, the rest of the information needed to display their favorites collection while offline).
-  * You’ll modify the existing sorting criteria for the main view to include an additional pivot to show their favorites collection.
+  * Allow users to view and play trailers (either in the YouTube app or a web browser).
+  * Allow users to read reviews of a selected movie.
+  * Allow users to mark a movie as a favorite in the details view by tapping a button(star).
+  * Create a database to store the names and ids of the user's favorite movies (and optionally, the rest of the information needed to display their favorites collection while offline).
+  * Modify the existing sorting criteria for the main view to include an additional pivot to show their favorites collection.
 
-## Why this Project
+## 2- Why this Project
 To become an Android developer, you must know how to bring particular mobile experiences to life. Specifically, you need to know how to build clean and compelling user interfaces (UIs), fetch data from network services, and optimize the experience for various mobile devices. You will hone these fundamental skills in this project.
 
 By building this app, you will demonstrate your understanding of the foundational elements of programming for Android. Your app will communicate with the Internet and provide a responsive and delightful user experience.
 
-## Learning objectives
+## 3- Learning Objectives
 - Fetch data from the Internet with theMovieDB API.
 - Use adapters and custom list layouts to populate list views.
 - Incorporate libraries to simplify the amount of code you need to write
 - Build a fully featured application that looks and feels natural on the latest Android operating system (Nougat, as of November 2016).
 
-## Project requirements
+## 4- Project Requirements
 - **User Interface - Layout**
   * UI contains an element (e.g., a spinner or settings menu) to toggle the sort order of the movies by: most popular, highest rated.
   * Movies are displayed in the main layout via a grid of their corresponding movie poster thumbnails.
@@ -60,7 +62,23 @@ By building this app, you will demonstrate your understanding of the foundationa
   * Data is updated whenever the user favorites or unfavorites a movie. No other persistence libraries are used.
   * When the "favorites" setting option is selected, the main view displays the entire favorites collection based on movie ids stored in the database.
 
-## Installation
-- You will first need to apply for an API key (v3 auth) from [TheMovieDB](https://www.themoviedb.org/)
-- You then need to enter your API key in the project's gradle.properties file:
-    ```API_KEY="(your API key)"```
+## 5- Completed Project - MovieNight
+- **Android Framework**
+  * HttpURLConnection
+  * RecyclerView
+  * ContentProvider
+  * SQLite
+  * Loaders
+  * CursorLoader
+  * AsyncTaskLoader
+- **UI**
+  * ConstraintLayout
+  * Navigation Drawer
+  * FAB
+  * Expandable/Collapsible TextView	
+- **Libraries**
+  * [Picasso](https://square.github.io/picasso/) v.2.5.2
+
+**Installation**
+  * Get an API key (v3 auth) from [TheMovieDB](https://www.themoviedb.org/)
+  * Enter your API key in the project's `gradle.properties` file as such: `API_KEY="(your API key)"`
