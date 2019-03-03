@@ -45,7 +45,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         Set expandable/collapsable TextView. 2 review textviews = reduced review and full review.
         When reduced review is clicked, visibility set to gone and full review set to visible.
         Text automatically collapses when other review clicked or when clicked again.
-        Need mReviewRecyclerView.setHasFixedSize() set to false in DetailActivity.
+        Needs mReviewRecyclerView.setHasFixedSize() set to false in DetailActivity.
         Source: https://stackoverflow.com/a/48092441/8691157
          */
         final boolean isExpanded = position == expandedItemPosition;
