@@ -143,14 +143,10 @@ public class Movie implements Parcelable {
      */
     public static String formatDate(String date) throws ParseException {
         String newDate = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            newDate = DateFormat.getDateInstance(DateFormat.MEDIUM).format(date);
-        } else {
             SimpleDateFormat spf=new SimpleDateFormat("yyyy-MM-dd");
             Date tempDate=spf.parse(date);
             spf= new SimpleDateFormat("MMM dd, yyyy");
             newDate = spf.format(tempDate);
-        }
         return newDate;
     }
 

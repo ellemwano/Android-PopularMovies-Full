@@ -23,6 +23,7 @@
         android:background="@color/cyan900"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
+        app:theme="@style/NavigationViewStyle"
         app:itemIconTint="@color/white"
         app:itemTextColor="@color/white"
         app:menu="@menu/menu_navigation">

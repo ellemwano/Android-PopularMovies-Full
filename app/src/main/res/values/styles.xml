@@ -29,4 +29,11 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="NavigationViewStyle">
+        <item name="android:textSize">16sp</item> <!-- menu item text size-->
+        <item name="android:listPreferredItemHeightSmall">60dp</item><!-- menu item height-->
+        <item name="android:fontFamily">sans-serif-smallcaps</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>
